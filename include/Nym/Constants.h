@@ -3,6 +3,18 @@
 /// \brief Declares externs to constants
 #pragma once
 
+///< Start of level functions
+extern void(*NYM_LEVEL_START_FUNCTIONS[NYM_LEVEL_MAX])(NymGame);
+
+///< Update level functions
+extern NymLevel(*NYM_LEVEL_UPDATE_FUNCTIONS[NYM_LEVEL_MAX])(NymGame);
+
+///< Draw level functions
+extern void(*NYM_LEVEL_DRAW_FUNCTIONS[NYM_LEVEL_MAX])(NymGame);
+
+///< End of level functions
+extern void(*NYM_LEVEL_END_FUNCTIONS[NYM_LEVEL_MAX])(NymGame);
+
 ///< File where logs from nymLog are stored
 extern const char *NYM_LOG_FILE;
 

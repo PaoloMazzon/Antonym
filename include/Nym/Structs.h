@@ -19,3 +19,11 @@ typedef enum {
 	NYM_LOG_LEVEL_ERROR = 2,    ///< Recoverable error
 	NYM_LOG_LEVEL_CRITICAL = 3, ///< Fatal error that will crash now the game
 } NymLogLevel;
+
+/// \brief All the levels in the game -- must be sequential
+typedef enum {
+	NYM_LEVEL_SPLASH_SCREEN = 0, ///< Opening splash screen
+	NYM_LEVEL_MENU = 1,          ///< Menu
+	NYM_LEVEL_MAX = 2,           ///< Total number of levels
+	NYM_LEVEL_QUIT = 500,        ///< Quit the game
+} NymLevel;

@@ -17,6 +17,11 @@ static NymGame _nymInitializeGame() {
 
 	// Load assets
 	game->assets = buildNymAssets();
+
+	// Begin the first level
+	game->level = NYM_LEVEL_MENU;
+	NYM_LEVEL_START_FUNCTIONS[game->level](game);
+
 	return game;
 }
 
@@ -37,8 +42,29 @@ void nymStart() {
 	NymGame game = _nymInitializeGame();
 
 	// Run game
-	// TODO: This
+	bool run = true;
+	bool kill = false;
+	SDL_Event event;
+	while (run) {
+		juUpdate();
+		while (SDL_PollEvent(&event))
+			if (event.type == SDL_QUIT)
+				kill = true;
 
+		NymLevel newLevel = NYM_LEVEL_UPDATE_FUNCTIONS[game->level](game);
+		NYM_LEVEL_DRAW_FUNCTIONS[game->level](game);
+
+		if (newLevel == NYM_LEVEL_QUIT || kill) {
+			NYM_LEVEL_END_FUNCTIONS[game->level](game);
+			run = false;
+		} else if (newLevel != game->level) {
+			// Unload current level, load new one
+			nymLog(NYM_LOG_LEVEL_MESSAGE, "Unloading level %i and loading level %i.", game->level, newLevel);
+			NYM_LEVEL_END_FUNCTIONS[game->level](game);
+			game->level = newLevel;
+			NYM_LEVEL_START_FUNCTIONS[game->level](game);
+		}
+	}
 
 	// Cleanup
 	_nymDeinitializeGame(game);

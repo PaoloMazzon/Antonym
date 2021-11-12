@@ -8,6 +8,7 @@
 struct NymGame {
 	NymAssets *assets; ///< Game assets
 	NymSave save; ///< Game save file
+	NymLevel level; ///< Current level - do not modify this variable outside of `Game.c`
 
 	///< Core stuff like window
 	struct {
