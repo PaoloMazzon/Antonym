@@ -1,5 +1,6 @@
 /// \file Game.c
 /// \author Paolo Mazzon
+#include "VK2D/VK2D.h"
 #include "Nym/Game.h"
 #include "Nym/Util.h"
 #include "Nym/Constants.h"
@@ -52,7 +53,10 @@ void nymStart() {
 				kill = true;
 
 		NymLevel newLevel = NYM_LEVEL_UPDATE_FUNCTIONS[game->level](game);
+
+		vk2dRendererStartFrame(VK2D_DEFAULT_COLOUR_MOD);
 		NYM_LEVEL_DRAW_FUNCTIONS[game->level](game);
+		vk2dRendererEndFrame();
 
 		if (newLevel == NYM_LEVEL_QUIT || kill) {
 			NYM_LEVEL_END_FUNCTIONS[game->level](game);
