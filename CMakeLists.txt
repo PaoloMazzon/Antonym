@@ -11,6 +11,6 @@ set(JAMUTIL_FILES JamUtil/JamUtil.c)
 
 file(GLOB SRC_FILES src/*.c)
 file(GLOB INC_FILES include/*.h)
-include_directories(Vulkan2D/ JamUtil/ include/ ${SDL2_INCLUDE_DIR} ${Vulkan_INCLUDE_DIRS})
+include_directories(Vulkan2D/ JamUtil/ include/ ${SDL2_INCLUDE_DIR} ${Vulkan_INCLUDE_DIRS} enet/include/)
 add_executable(${PROJECT_NAME} main.c ${JAMUTIL_FILES} ${VK2D_FILES} ${VMA_FILES} ${SRC_FILES} ${INC_FILES})
 target_link_libraries(${PROJECT_NAME} m dsound ${SDL2_LIBRARIES} ${Vulkan_LIBRARIES})

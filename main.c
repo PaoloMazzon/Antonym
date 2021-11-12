@@ -1,8 +1,6 @@
-#include <stdio.h>
-#define SDL_MAIN_HANDLED
-#include "JamUtil.h"
+#include "Nym/Game.h"
 
 int main() {
-	printf("Hello, World!\n");
+	nymStart();
 	return 0;
 }
