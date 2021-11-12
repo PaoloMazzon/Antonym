@@ -17,6 +17,10 @@ void *nymCalloc(uint32_t size) {
 	return out;
 }
 
+void nymFree(void *ptr) {
+	if (ptr != NULL) free(ptr);
+}
+
 void nymLog(NymLogLevel level, const char *fmt, ...) {
 	va_list list;
 
