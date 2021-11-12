@@ -17,3 +17,7 @@ int NYM_WINDOW_HEIGHT = 225;
 float NYM_GAME_WIDTH = 400;
 
 float NYM_GAME_HEIGHT = 225;
+
+const char *NYM_SAVE_FILE = "save.bin";
+
+uint32_t NYM_SAVE_VERSION = 1;

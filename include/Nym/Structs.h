@@ -8,6 +8,7 @@
 /********************** Forward-Declare Structs **********************/
 
 typedef struct NymGame *NymGame;
+typedef struct NymSave *NymSave;
 
 /********************** Enums **********************/
 

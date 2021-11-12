@@ -20,3 +20,9 @@ extern float NYM_GAME_WIDTH;
 
 ///< Height of the game on startup
 extern float NYM_GAME_HEIGHT;
+
+///< Save file location
+extern const char *NYM_SAVE_FILE;
+
+///< Save file version
+extern uint32_t NYM_SAVE_VERSION;
