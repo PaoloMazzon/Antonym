@@ -27,13 +27,13 @@ void nymLog(NymLogLevel level, const char *fmt, ...) {
 	// To stdout
 	va_start(list, fmt);
 	if (level == NYM_LOG_LEVEL_MESSAGE)
-		printf("[Message] ");
+		printf("[Nym Message] ");
 	else if (level == NYM_LOG_LEVEL_WARNING)
-		printf("[Warning] ");
+		printf("[Nym Warning] ");
 	else if (level == NYM_LOG_LEVEL_ERROR)
-		printf("[Error] ");
+		printf("[Nym Error] ");
 	else if (level == NYM_LOG_LEVEL_CRITICAL)
-		printf("[Fatal Error] ");
+		printf("[Nym Fatal Error] ");
 	vprintf(fmt, list);
 	printf("\n");
 	fflush(stdout);
@@ -43,13 +43,13 @@ void nymLog(NymLogLevel level, const char *fmt, ...) {
 	FILE *file = fopen(NYM_LOG_FILE, "a");
 	va_start(list, fmt);
 	if (level == NYM_LOG_LEVEL_MESSAGE)
-		fprintf(file, "[Message] ");
+		fprintf(file, "[Nym Message] ");
 	else if (level == NYM_LOG_LEVEL_WARNING)
-		fprintf(file, "[Warning] ");
+		fprintf(file, "[Nym Warning] ");
 	else if (level == NYM_LOG_LEVEL_ERROR)
-		fprintf(file, "[Error] ");
+		fprintf(file, "[Nym Error] ");
 	else if (level == NYM_LOG_LEVEL_CRITICAL)
-		fprintf(file, "[Fatal Error] ");
+		fprintf(file, "[Nym Fatal Error] ");
 	vfprintf(file, fmt, list);
 	fprintf(file, "\n");
 	fclose(file);

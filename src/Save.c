@@ -28,7 +28,7 @@ NymSave nymSaveLoad(const char *file) {
 	JUBuffer buffer = juBufferLoad(file);
 	NymSave save = nymCalloc(sizeof(struct NymSave));
 
-	if (buffer->size >= 4) {
+	if (buffer != NULL && buffer->size >= 4) {
 		// Copy the save version
 		memcpy(save, buffer->data, sizeof(uint32_t));
 

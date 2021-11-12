@@ -7,12 +7,14 @@ extern JULoadedAsset ASSETS[2];
 
 #ifdef NYMASSETS_IMPLEMENTATION
 JULoadedAsset ASSETS[] = {
+    {"data/Sprites.ini"},
     {"data/fonts/TNR16.jufnt"},
 };
 #endif
 
 typedef struct NymAssets {
     JULoader loader;
+    JUBuffer bufSprites;
     JUFont fntTNR16;
 } NymAssets;
 
@@ -24,6 +26,7 @@ void destroyNymAssets(NymAssets *s);
 NymAssets *buildNymAssets() {
     NymAssets *s = malloc(sizeof(struct NymAssets));
     s->loader = juLoaderCreate(ASSETS, 2);
+    s->bufSprites = juLoaderGetBuffer(s->loader, "data/Sprites.ini");
     s->fntTNR16 = juLoaderGetFont(s->loader, "data/fonts/TNR16.jufnt");
     return s;
 }

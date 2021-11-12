@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(Antonym)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
 
 find_package(Vulkan)
 find_package(SDL2 REQUIRED)
