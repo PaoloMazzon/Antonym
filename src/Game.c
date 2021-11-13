@@ -1,5 +1,7 @@
 /// \file Game.c
 /// \author Paolo Mazzon
+#define ENET_IMPLEMENTATION
+#include "enet.h"
 #include "VK2D/VK2D.h"
 #include "Nym/Game.h"
 #include "Nym/Util.h"
@@ -11,12 +13,14 @@ static NymGame _nymInitializeGame() {
 	// Load save file first
 	game->save = nymSaveLoad(NYM_SAVE_FILE);
 
-	// Start SDL, VK2D, and JamUtil
+	// Start SDL, VK2D, JamUtil, and ENet
 	game->Core.window = SDL_CreateWindow(NYM_WINDOW_NAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, NYM_WINDOW_WIDTH, NYM_WINDOW_HEIGHT, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 	vk2dRendererInit(game->Core.window, game->save->rendererConfig);
 	juInit(game->Core.window);
 	game->Core.backbuffer = vk2dTextureCreate(vk2dRendererGetDevice(), NYM_GAME_WIDTH, NYM_GAME_HEIGHT);
 	vk2dRendererSetTextureCamera(true);
+	if (enet_initialize() != 0)
+		nymLog(NYM_LOG_LEVEL_CRITICAL, "Failed to initialize ENet.");
 
 	// Load assets
 	game->assets = buildNymAssets();
@@ -31,6 +35,7 @@ static NymGame _nymInitializeGame() {
 static void _nymDeinitializeGame(NymGame game) {
 	// Destroy all contexts in order
 	vk2dRendererWait();
+	enet_deinitialize();
 	vk2dTextureFree(game->Core.backbuffer);
 	destroyNymAssets(game->assets);
 	juQuit();
