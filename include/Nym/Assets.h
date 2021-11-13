@@ -3,12 +3,18 @@
 #include "JamUtil.h"
 
 // Forward declare the asset array
-extern JULoadedAsset ASSETS[2];
+extern JULoadedAsset ASSETS[8];
 
 #ifdef NYMASSETS_IMPLEMENTATION
 JULoadedAsset ASSETS[] = {
     {"data/Sprites.ini"},
     {"data/fonts/TNR16.jufnt"},
+    {"data/sprites/MenuOptionsButton.png"},
+    {"data/sprites/MenuPlayButton.png"},
+    {"data/sprites/MenuQuitButton.png"},
+    {"data/sprites/MenuPlayButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
+    {"data/sprites/MenuOptionsButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
+    {"data/sprites/MenuQuitButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
 };
 #endif
 
@@ -16,6 +22,12 @@ typedef struct NymAssets {
     JULoader loader;
     JUBuffer bufSprites;
     JUFont fntTNR16;
+    VK2DTexture texMenuOptionsButton;
+    VK2DTexture texMenuPlayButton;
+    VK2DTexture texMenuQuitButton;
+    JUSprite sprMenuPlayButton;
+    JUSprite sprMenuOptionsButton;
+    JUSprite sprMenuQuitButton;
 } NymAssets;
 
 // Functions to create and destroy the asset struct
@@ -25,9 +37,15 @@ void destroyNymAssets(NymAssets *s);
 #ifdef NYMASSETS_IMPLEMENTATION
 NymAssets *buildNymAssets() {
     NymAssets *s = malloc(sizeof(struct NymAssets));
-    s->loader = juLoaderCreate(ASSETS, 2);
+    s->loader = juLoaderCreate(ASSETS, 8);
     s->bufSprites = juLoaderGetBuffer(s->loader, "data/Sprites.ini");
     s->fntTNR16 = juLoaderGetFont(s->loader, "data/fonts/TNR16.jufnt");
+    s->texMenuOptionsButton = juLoaderGetTexture(s->loader, "data/sprites/MenuOptionsButton.png");
+    s->texMenuPlayButton = juLoaderGetTexture(s->loader, "data/sprites/MenuPlayButton.png");
+    s->texMenuQuitButton = juLoaderGetTexture(s->loader, "data/sprites/MenuQuitButton.png");
+    s->sprMenuPlayButton = juLoaderGetSprite(s->loader, "data/sprites/MenuPlayButton.png");
+    s->sprMenuOptionsButton = juLoaderGetSprite(s->loader, "data/sprites/MenuOptionsButton.png");
+    s->sprMenuQuitButton = juLoaderGetSprite(s->loader, "data/sprites/MenuQuitButton.png");
     return s;
 }
 
