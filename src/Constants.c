@@ -26,19 +26,23 @@ uint32_t NYM_SAVE_VERSION = 1;
 void(*NYM_LEVEL_START_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
 		&nymLevelSplashScreenStart,
 		&nymLevelMenuStart,
+		&nymLevelTestingArenaStart,
 };
 
 NymLevel(*NYM_LEVEL_UPDATE_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
 		&nymLevelSplashScreenUpdate,
 		&nymLevelMenuUpdate,
+		&nymLevelTestingArenaUpdate,
 };
 
 void(*NYM_LEVEL_DRAW_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
 		&nymLevelSplashScreenDraw,
 		&nymLevelMenuDraw,
+		&nymLevelTestingArenaDraw,
 };
 
 void(*NYM_LEVEL_END_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
 		&nymLevelSplashScreenEnd,
 		&nymLevelMenuEnd,
+		&nymLevelTestingArenaEnd,
 };

@@ -25,6 +25,7 @@ typedef enum {
 typedef enum {
 	NYM_LEVEL_SPLASH_SCREEN = 0, ///< Opening splash screen
 	NYM_LEVEL_MENU = 1,          ///< Menu
-	NYM_LEVEL_MAX = 2,           ///< Total number of levels
+	NYM_LEVEL_TESTINGARENA = 2,    ///< Testing arena
+	NYM_LEVEL_MAX = 3,           ///< Total number of levels
 	NYM_LEVEL_QUIT = 500,        ///< Quit the game
 } NymLevel;

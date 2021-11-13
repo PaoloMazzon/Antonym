@@ -15,3 +15,9 @@ void nymLevelMenuStart(NymGame game);
 NymLevel nymLevelMenuUpdate(NymGame game);
 void nymLevelMenuDraw(NymGame game);
 void nymLevelMenuEnd(NymGame game);
+
+// Testing arena
+void nymLevelTestingArenaStart(NymGame game);
+NymLevel nymLevelTestingArenaUpdate(NymGame game);
+void nymLevelTestingArenaDraw(NymGame game);
+void nymLevelTestingArenaEnd(NymGame game);

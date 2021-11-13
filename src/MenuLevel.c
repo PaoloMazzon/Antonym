@@ -16,6 +16,10 @@ void nymLevelMenuStart(NymGame game) {
 }
 
 NymLevel nymLevelMenuUpdate(NymGame game) {
+	if (nymUICheckButton(game, &PLAY_BUTTON))
+		return NYM_LEVEL_TESTINGARENA;
+	if (nymUICheckButton(game, &QUIT_BUTTON))
+		return NYM_LEVEL_QUIT;
 	return NYM_LEVEL_MENU;
 }
 
