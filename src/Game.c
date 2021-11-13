@@ -6,6 +6,7 @@
 #include "Nym/Game.h"
 #include "Nym/Util.h"
 #include "Nym/Constants.h"
+#include "Nym/UI.h"
 
 static NymGame _nymInitializeGame() {
 	NymGame game = nymCalloc(sizeof(struct NymGame));
@@ -24,6 +25,7 @@ static NymGame _nymInitializeGame() {
 
 	// Load assets
 	game->assets = buildNymAssets();
+	//nymUISetMessageSprite(); TODO: Make a button sprite for the message box
 
 	// Begin the first level
 	game->level = NYM_LEVEL_SPLASH_SCREEN;
@@ -87,6 +89,10 @@ void nymStart() {
 		vk2dRendererSetTarget(game->Core.backbuffer);
 		vk2dRendererClear();
 		NYM_LEVEL_DRAW_FUNCTIONS[game->level](game);
+
+		// Draw message box and debug stuff on top of it
+		nymUIDrawOverly();
+		nymUIDrawMessage();
 
 		// Draw the backbuffer to the screen
 		vk2dRendererLockCameras(VK2D_DEFAULT_CAMERA);

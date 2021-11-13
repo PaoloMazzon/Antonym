@@ -44,3 +44,9 @@ extern int NYM_DEFAULT_PORT;
 
 ///< Amount of time in milliseconds to wait before failing to connect to a host
 extern int NYM_CONNECTION_TIMEOUT;
+
+///< Size in bytes of the overlay message buffer
+#define NYM_MESSAGE_BUFFER_SIZE 1024
+
+///< Size in bytes of the title of the overlay message
+#define NYM_MESSAGE_TITLE_BUFFER_SIZE 100
