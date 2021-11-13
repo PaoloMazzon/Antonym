@@ -58,7 +58,21 @@ void nymStart() {
 				kill = true;
 
 		// Get mouse input
-		// TODO: This
+		int w, h, mx, my;
+		uint32_t mouseState;
+		float minScale = (float)w / NYM_GAME_WIDTH > (float)h / NYM_GAME_HEIGHT ? h / NYM_GAME_HEIGHT : w / NYM_GAME_WIDTH;
+		SDL_GetWindowSize(game->Core.window, &w, &h);
+		mouseState = SDL_GetMouseState(&mx, &my);
+		float frameXDisplacement = (w - (minScale * NYM_GAME_WIDTH)) / 2;
+		float frameYDisplacement = (h - (minScale * NYM_GAME_HEIGHT)) / 2;
+		game->Input.mx = (mx - frameXDisplacement) / minScale;
+		game->Input.my = (my - frameYDisplacement) / minScale;
+		game->Input.ml[1] = game->Input.ml[0];
+		game->Input.mm[1] = game->Input.mm[0];
+		game->Input.mr[1] = game->Input.mr[0];
+		game->Input.ml[0] = mouseState & SDL_BUTTON_LEFT;
+		game->Input.mm[0] = mouseState & SDL_BUTTON_MIDDLE;
+		game->Input.mr[0] = mouseState & SDL_BUTTON_RIGHT;
 
 		// Run the current level
 		NymLevel newLevel = NYM_LEVEL_UPDATE_FUNCTIONS[game->level](game);
@@ -70,12 +84,9 @@ void nymStart() {
 		NYM_LEVEL_DRAW_FUNCTIONS[game->level](game);
 
 		// Draw the backbuffer to the screen
-		int w, h;
-		SDL_GetWindowSize(game->Core.window, &w, &h);
-		float minScale = (float)w / NYM_GAME_WIDTH > (float)h / NYM_GAME_HEIGHT ? h / NYM_GAME_HEIGHT : w / NYM_GAME_WIDTH;
 		vk2dRendererLockCameras(VK2D_DEFAULT_CAMERA);
 		vk2dRendererSetTarget(VK2D_TARGET_SCREEN);
-		vk2dDrawTextureExt(game->Core.backbuffer, (w - (minScale * NYM_GAME_WIDTH)) / 2, (h - (minScale * NYM_GAME_HEIGHT)) / 2, minScale, minScale, 0, 0, 0);
+		vk2dDrawTextureExt(game->Core.backbuffer, frameXDisplacement, frameYDisplacement, minScale, minScale, 0, 0, 0);
 		vk2dRendererUnlockCameras();
 		vk2dRendererEndFrame();
 

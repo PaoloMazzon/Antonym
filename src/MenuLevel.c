@@ -20,6 +20,9 @@ NymLevel nymLevelMenuUpdate(NymGame game) {
 }
 
 void nymLevelMenuDraw(NymGame game) {
+	// Background
+	vk2dDrawTexture(game->assets->texMenuBackground, 0, 0);
+
 	// Draw the buttons
 	nymUIDrawButton(game, &PLAY_BUTTON);
 	nymUIDrawButton(game, &OPTIONS_BUTTON);
