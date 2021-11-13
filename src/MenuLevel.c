@@ -2,9 +2,17 @@
 /// \author Paolo Mazzon
 #include "Nym/Levels.h"
 #include "Nym/Game.h"
+#include "Nym/UI.h"
+
+static NymUIButton PLAY_BUTTON = {32, 32};
+static NymUIButton OPTIONS_BUTTON = {40, 32 + 64};
+static NymUIButton QUIT_BUTTON = {48, 32 + 64 + 64};
 
 void nymLevelMenuStart(NymGame game) {
-
+	// Setup the buttons
+	PLAY_BUTTON.spr = game->assets->sprMenuPlayButton;
+	OPTIONS_BUTTON.spr = game->assets->sprMenuOptionsButton;
+	QUIT_BUTTON.spr = game->assets->sprMenuQuitButton;
 }
 
 NymLevel nymLevelMenuUpdate(NymGame game) {
@@ -12,9 +20,10 @@ NymLevel nymLevelMenuUpdate(NymGame game) {
 }
 
 void nymLevelMenuDraw(NymGame game) {
-	vk2dRendererSetColourMod((void*)VK2D_BLACK);
-	juFontDraw(game->assets->fntTNR16, 0, 0, "Menu");
-	vk2dRendererSetColourMod((void*)VK2D_DEFAULT_COLOUR_MOD);
+	// Draw the buttons
+	nymUIDrawButton(game, &PLAY_BUTTON);
+	nymUIDrawButton(game, &OPTIONS_BUTTON);
+	nymUIDrawButton(game, &QUIT_BUTTON);
 }
 
 void nymLevelMenuEnd(NymGame game) {

@@ -9,6 +9,7 @@
 
 typedef struct NymGame *NymGame;
 typedef struct NymSave *NymSave;
+typedef struct NymUIButton NymUIButton;
 
 /********************** Enums **********************/
 

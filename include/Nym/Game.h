@@ -15,6 +15,15 @@ struct NymGame {
 		SDL_Window *window;     ///< Window the game is in
 		VK2DTexture backbuffer; ///< Where the game is drawn
 	} Core;
+
+	///< Input things
+	struct {
+		float mx;   ///< Mouse x
+		float my;   ///< Mouse y
+		bool ml[2]; ///< Mouse button left (current frame and last frame)
+		bool mm[2]; ///< Mouse button middle (current frame and last frame)
+		bool mr[2]; ///< Mouse button right (current frame and last frame)
+	} Input;
 };
 
 /// \brief Starts the game

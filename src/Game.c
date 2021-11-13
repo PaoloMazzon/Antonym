@@ -57,6 +57,9 @@ void nymStart() {
 			if (event.type == SDL_QUIT)
 				kill = true;
 
+		// Get mouse input
+		// TODO: This
+
 		// Run the current level
 		NymLevel newLevel = NYM_LEVEL_UPDATE_FUNCTIONS[game->level](game);
 
