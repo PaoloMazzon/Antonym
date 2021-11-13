@@ -23,6 +23,10 @@ const char *NYM_SAVE_FILE = "save.bin";
 
 uint32_t NYM_SAVE_VERSION = 1;
 
+int NYM_DEFAULT_PORT = 7000;
+
+int NYM_CONNECTION_TIMEOUT = 5000;
+
 void(*NYM_LEVEL_START_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
 		&nymLevelSplashScreenStart,
 		&nymLevelMenuStart,
