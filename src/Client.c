@@ -8,30 +8,36 @@ NymClient nymClientCreate(const char *ip) {
 	NymClient client = nymCalloc(sizeof(struct NymClient));
 
 	// Create host client
-	ENetAddress address = {ENET_HOST_ANY, NYM_DEFAULT_PORT};
-	client->client = enet_host_create(&address, 1, 2, 0, 0);
+	client->client = enet_host_create(NULL, 1, 2, 0, 0);
+	if (client->client != NULL) {
+		// Create peer
+		client->address.port = NYM_DEFAULT_PORT;
+		enet_address_set_host(&client->address, ip);
+		client->peer = enet_host_connect(client->client, &client->address, 2, 0);
 
-	// Create peer
-	client->address.port = NYM_DEFAULT_PORT;
-	enet_address_set_host(&client->address, ip);
-	client->peer = enet_host_connect(client->client, &client->address, 2, 0);
-
-	// Make sure we get connected
-	ENetEvent event;
-	if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-		nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\".", ip);
+		// Make sure we get connected
+		ENetEvent event;
+		if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\".", ip);
+		} else {
+			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\".", ip);
+			enet_host_destroy(client->client);
+			nymFree(client);
+			client = NULL;
+		}
 	} else {
-		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\".", ip);
-		enet_host_destroy(client->client);
 		nymFree(client);
 		client = NULL;
+		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to create ENet host.");
 	}
 
 	return client;
 }
 
 void nymClientDestroy(NymClient client) {
-	enet_peer_disconnect(client->peer, 0);
-	enet_host_destroy(client->client);
-	nymFree(client);
+	if (client != NULL) {
+		enet_peer_disconnect(client->peer, 0);
+		enet_host_destroy(client->client);
+		nymFree(client);
+	}
 }

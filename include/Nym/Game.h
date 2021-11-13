@@ -4,11 +4,13 @@
 #pragma once
 #include "Nym/Assets.h"
 #include "Nym/Save.h"
+#include "Nym/Client.h"
 
 struct NymGame {
 	NymAssets *assets; ///< Game assets
 	NymSave save;      ///< Game save file
 	NymLevel level;    ///< Current level - do not modify this variable outside of `Game.c`
+	NymClient client;  ///< Client for online multiplayer
 
 	///< Core stuff like window
 	struct {
