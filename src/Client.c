@@ -18,6 +18,7 @@ NymClient nymClientCreate(const char *ip) {
 		// Make sure we get connected
 		ENetEvent event;
 		if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+			enet_host_flush(client->client);
 			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\".", ip);
 		} else {
 			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\".", ip);
