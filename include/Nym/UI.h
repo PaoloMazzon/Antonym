@@ -39,4 +39,4 @@ bool nymUIMessageActive();
 void nymUIDrawOverly();
 
 /// \brief Draws the message if its active
-void nymUIDrawMessage();
+void nymUIDrawMessage(NymGame game);

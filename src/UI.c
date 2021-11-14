@@ -19,13 +19,14 @@ bool nymUICheckButton(NymGame game, NymUIButton *button) {
 
 void nymUISetMessageSprite(JUSprite sprite) {
 	gMessageBox.confirmButton.spr = sprite;
-	// TODO: Button placement
+	gMessageBox.confirmButton.x = 184;
+	gMessageBox.confirmButton.y = 152;
 }
 
 void nymUICreateMessage(const char *title, const char *message) {
 	gMessageBox.active = true;
-	strncpy(gMessageBox.message, title, NYM_MESSAGE_BUFFER_SIZE - 1);
-	strncpy(gMessageBox.message, title, NYM_MESSAGE_TITLE_BUFFER_SIZE - 1);
+	strncpy(gMessageBox.message, message, NYM_MESSAGE_BUFFER_SIZE - 1);
+	strncpy(gMessageBox.title, title, NYM_MESSAGE_TITLE_BUFFER_SIZE - 1);
 }
 
 bool nymUIMessageActive() {
@@ -33,9 +34,33 @@ bool nymUIMessageActive() {
 }
 
 void nymUIDrawOverly() {
-	// TODO: This
+	// TODO: Debug overlay
 }
 
-void nymUIDrawMessage() {
-	// TODO: This
+/*
+ * center title at y pos 55
+ * message starts at (80, 80) max width 16*15
+ * button starts at (184, 152)
+ * (64, 48) 17*16x8*16
+ * */
+
+void nymUIDrawMessage(NymGame game) {
+	if (gMessageBox.active) {
+		// Background
+		vk2dRendererSetColourMod(VK2D_RED);
+		vk2dDrawRectangle(64, 48, 17 * 16, 8 * 16);
+
+		// Title
+		vk2dRendererSetColourMod(VK2D_BLACK);
+		juFontDraw(game->assets->fntTNR16, 80, 54, "%s", gMessageBox.title);
+
+		// Message
+		juFontDrawWrapped(game->assets->fntTNR16, 80, 80, 16 * 15, "%s", gMessageBox.message);
+
+		// Button
+		vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
+		nymUIDrawButton(game, &gMessageBox.confirmButton);
+		if (nymUICheckButton(game, &gMessageBox.confirmButton))
+			gMessageBox.active = false;
+	}
 }

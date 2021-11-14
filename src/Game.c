@@ -25,7 +25,7 @@ static NymGame _nymInitializeGame() {
 
 	// Load assets
 	game->assets = buildNymAssets();
-	//nymUISetMessageSprite(); TODO: Make a button sprite for the message box
+	nymUISetMessageSprite(game->assets->sprMessageBoxConfirmButton);
 
 	// Begin the first level
 	game->level = NYM_LEVEL_SPLASH_SCREEN;
@@ -92,7 +92,7 @@ void nymStart() {
 
 		// Draw message box and debug stuff on top of it
 		nymUIDrawOverly();
-		nymUIDrawMessage();
+		nymUIDrawMessage(game);
 
 		// Draw the backbuffer to the screen
 		vk2dRendererLockCameras(VK2D_DEFAULT_CAMERA);

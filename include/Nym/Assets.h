@@ -3,7 +3,7 @@
 #include "JamUtil.h"
 
 // Forward declare the asset array
-extern JULoadedAsset ASSETS[9];
+extern JULoadedAsset ASSETS[11];
 
 #ifdef NYMASSETS_IMPLEMENTATION
 JULoadedAsset ASSETS[] = {
@@ -12,10 +12,12 @@ JULoadedAsset ASSETS[] = {
     {"data/sprites/MenuOptionsButton.png"},
     {"data/sprites/MenuPlayButton.png"},
     {"data/sprites/MenuQuitButton.png"},
+    {"data/sprites/MessageBoxConfirmButton.png"},
     {"data/textures/MenuBackground.png"},
     {"data/sprites/MenuPlayButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
     {"data/sprites/MenuOptionsButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
     {"data/sprites/MenuQuitButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
+    {"data/sprites/MessageBoxConfirmButton.png", 0, 0, 32, 16, 0, 3, 0, 0},
 };
 #endif
 
@@ -26,10 +28,12 @@ typedef struct NymAssets {
     VK2DTexture texMenuOptionsButton;
     VK2DTexture texMenuPlayButton;
     VK2DTexture texMenuQuitButton;
+    VK2DTexture texMessageBoxConfirmButton;
     VK2DTexture texMenuBackground;
     JUSprite sprMenuPlayButton;
     JUSprite sprMenuOptionsButton;
     JUSprite sprMenuQuitButton;
+    JUSprite sprMessageBoxConfirmButton;
 } NymAssets;
 
 // Functions to create and destroy the asset struct
@@ -39,16 +43,18 @@ void destroyNymAssets(NymAssets *s);
 #ifdef NYMASSETS_IMPLEMENTATION
 NymAssets *buildNymAssets() {
     NymAssets *s = malloc(sizeof(struct NymAssets));
-    s->loader = juLoaderCreate(ASSETS, 9);
+    s->loader = juLoaderCreate(ASSETS, 11);
     s->bufSprites = juLoaderGetBuffer(s->loader, "data/Sprites.ini");
     s->fntTNR16 = juLoaderGetFont(s->loader, "data/fonts/TNR16.jufnt");
     s->texMenuOptionsButton = juLoaderGetTexture(s->loader, "data/sprites/MenuOptionsButton.png");
     s->texMenuPlayButton = juLoaderGetTexture(s->loader, "data/sprites/MenuPlayButton.png");
     s->texMenuQuitButton = juLoaderGetTexture(s->loader, "data/sprites/MenuQuitButton.png");
+    s->texMessageBoxConfirmButton = juLoaderGetTexture(s->loader, "data/sprites/MessageBoxConfirmButton.png");
     s->texMenuBackground = juLoaderGetTexture(s->loader, "data/textures/MenuBackground.png");
     s->sprMenuPlayButton = juLoaderGetSprite(s->loader, "data/sprites/MenuPlayButton.png");
     s->sprMenuOptionsButton = juLoaderGetSprite(s->loader, "data/sprites/MenuOptionsButton.png");
     s->sprMenuQuitButton = juLoaderGetSprite(s->loader, "data/sprites/MenuQuitButton.png");
+    s->sprMessageBoxConfirmButton = juLoaderGetSprite(s->loader, "data/sprites/MessageBoxConfirmButton.png");
     return s;
 }
 
