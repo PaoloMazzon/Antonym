@@ -3,7 +3,7 @@
 #include "JamUtil.h"
 
 // Forward declare the asset array
-extern JULoadedAsset ASSETS[11];
+extern JULoadedAsset ASSETS[12];
 
 #ifdef NYMASSETS_IMPLEMENTATION
 JULoadedAsset ASSETS[] = {
@@ -14,6 +14,7 @@ JULoadedAsset ASSETS[] = {
     {"data/sprites/MenuQuitButton.png"},
     {"data/sprites/MessageBoxConfirmButton.png"},
     {"data/textures/MenuBackground.png"},
+    {"data/textures/MessageBoxBackground.png"},
     {"data/sprites/MenuPlayButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
     {"data/sprites/MenuOptionsButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
     {"data/sprites/MenuQuitButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
@@ -30,6 +31,7 @@ typedef struct NymAssets {
     VK2DTexture texMenuQuitButton;
     VK2DTexture texMessageBoxConfirmButton;
     VK2DTexture texMenuBackground;
+    VK2DTexture texMessageBoxBackground;
     JUSprite sprMenuPlayButton;
     JUSprite sprMenuOptionsButton;
     JUSprite sprMenuQuitButton;
@@ -43,7 +45,7 @@ void destroyNymAssets(NymAssets *s);
 #ifdef NYMASSETS_IMPLEMENTATION
 NymAssets *buildNymAssets() {
     NymAssets *s = malloc(sizeof(struct NymAssets));
-    s->loader = juLoaderCreate(ASSETS, 11);
+    s->loader = juLoaderCreate(ASSETS, 12);
     s->bufSprites = juLoaderGetBuffer(s->loader, "data/Sprites.ini");
     s->fntTNR16 = juLoaderGetFont(s->loader, "data/fonts/TNR16.jufnt");
     s->texMenuOptionsButton = juLoaderGetTexture(s->loader, "data/sprites/MenuOptionsButton.png");
@@ -51,6 +53,7 @@ NymAssets *buildNymAssets() {
     s->texMenuQuitButton = juLoaderGetTexture(s->loader, "data/sprites/MenuQuitButton.png");
     s->texMessageBoxConfirmButton = juLoaderGetTexture(s->loader, "data/sprites/MessageBoxConfirmButton.png");
     s->texMenuBackground = juLoaderGetTexture(s->loader, "data/textures/MenuBackground.png");
+    s->texMessageBoxBackground = juLoaderGetTexture(s->loader, "data/textures/MessageBoxBackground.png");
     s->sprMenuPlayButton = juLoaderGetSprite(s->loader, "data/sprites/MenuPlayButton.png");
     s->sprMenuOptionsButton = juLoaderGetSprite(s->loader, "data/sprites/MenuOptionsButton.png");
     s->sprMenuQuitButton = juLoaderGetSprite(s->loader, "data/sprites/MenuQuitButton.png");

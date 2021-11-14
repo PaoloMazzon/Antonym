@@ -12,6 +12,8 @@ typedef struct NymSave *NymSave;
 typedef struct NymUIButton NymUIButton;
 typedef struct NymClient *NymClient;
 typedef struct NymUIMessage NymUIMessage;
+typedef struct NymPacketClient NymPacketClient;
+typedef struct NymPacketServer NymPacketServer;
 
 /********************** Enums **********************/
 

@@ -37,18 +37,10 @@ void nymUIDrawOverly() {
 	// TODO: Debug overlay
 }
 
-/*
- * center title at y pos 55
- * message starts at (80, 80) max width 16*15
- * button starts at (184, 152)
- * (64, 48) 17*16x8*16
- * */
-
 void nymUIDrawMessage(NymGame game) {
 	if (gMessageBox.active) {
 		// Background
-		vk2dRendererSetColourMod(VK2D_RED);
-		vk2dDrawRectangle(64, 48, 17 * 16, 8 * 16);
+		vk2dDrawTexture(game->assets->texMessageBoxBackground, 64, 48);
 
 		// Title
 		vk2dRendererSetColourMod(VK2D_BLACK);
