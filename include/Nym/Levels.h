@@ -21,3 +21,21 @@ void nymLevelTestingArenaStart(NymGame game);
 NymLevel nymLevelTestingArenaUpdate(NymGame game);
 void nymLevelTestingArenaDraw(NymGame game);
 void nymLevelTestingArenaEnd(NymGame game);
+
+// Connection screen
+void nymLevelConnectionScreenStart(NymGame game);
+NymLevel nymLevelConnectionScreenUpdate(NymGame game);
+void nymLevelConnectionScreenDraw(NymGame game);
+void nymLevelConnectionScreenEnd(NymGame game);
+
+// Lobby
+void nymLevelLobbyStart(NymGame game);
+NymLevel nymLevelLobbyUpdate(NymGame game);
+void nymLevelLobbyDraw(NymGame game);
+void nymLevelLobbyEnd(NymGame game);
+
+// Game world
+void nymLevelGameWorldStart(NymGame game);
+NymLevel nymLevelGameWorldUpdate(NymGame game);
+void nymLevelGameWorldDraw(NymGame game);
+void nymLevelGameWorldEnd(NymGame game);

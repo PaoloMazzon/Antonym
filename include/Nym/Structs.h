@@ -30,9 +30,12 @@ typedef enum {
 
 /// \brief All the levels in the game -- must be sequential
 typedef enum {
-	NYM_LEVEL_SPLASH_SCREEN = 0, ///< Opening splash screen
-	NYM_LEVEL_MENU = 1,          ///< Menu
-	NYM_LEVEL_TESTINGARENA = 2,  ///< Testing arena
-	NYM_LEVEL_MAX = 3,           ///< Total number of levels
-	NYM_LEVEL_QUIT = 500,        ///< Quit the game
+	NYM_LEVEL_SPLASH_SCREEN = 0,    ///< Opening splash screen
+	NYM_LEVEL_MENU = 1,             ///< Menu
+	NYM_LEVEL_TESTINGARENA = 2,     ///< Testing arena
+	NYM_LEVEL_CONNECTIONSCREEN = 3, ///< Connect to server screen
+	NYM_LEVEL_LOBBY = 4,            ///< Lobby screen before games
+	NYM_LEVEL_GAMEWORLD = 5,        ///< Actual game world where game takes place
+	NYM_LEVEL_MAX = 6,              ///< Total number of levels
+	NYM_LEVEL_QUIT = 500,           ///< Quit the game
 } NymLevel;

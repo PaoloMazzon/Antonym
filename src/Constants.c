@@ -29,26 +29,38 @@ int NYM_CONNECTION_TIMEOUT = 5000;
 
 int NYM_PLAYER_INDEX = 0;
 
-void(*NYM_LEVEL_START_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
+void(*NYM_LEVEL_START_FUNCTIONS[NYM_LEVEL_MAX])(const NymGame) = {
 		&nymLevelSplashScreenStart,
 		&nymLevelMenuStart,
 		&nymLevelTestingArenaStart,
+		&nymLevelConnectionScreenStart,
+		&nymLevelLobbyStart,
+		&nymLevelGameWorldStart,
 };
 
-NymLevel(*NYM_LEVEL_UPDATE_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
+NymLevel(*NYM_LEVEL_UPDATE_FUNCTIONS[NYM_LEVEL_MAX])(const NymGame) = {
 		&nymLevelSplashScreenUpdate,
 		&nymLevelMenuUpdate,
 		&nymLevelTestingArenaUpdate,
+		&nymLevelConnectionScreenUpdate,
+		&nymLevelLobbyUpdate,
+		&nymLevelGameWorldUpdate,
 };
 
-void(*NYM_LEVEL_DRAW_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
+void(*NYM_LEVEL_DRAW_FUNCTIONS[NYM_LEVEL_MAX])(const NymGame) = {
 		&nymLevelSplashScreenDraw,
 		&nymLevelMenuDraw,
 		&nymLevelTestingArenaDraw,
+		&nymLevelConnectionScreenDraw,
+		&nymLevelLobbyDraw,
+		&nymLevelGameWorldDraw,
 };
 
-void(*NYM_LEVEL_END_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
+void(*NYM_LEVEL_END_FUNCTIONS[NYM_LEVEL_MAX])(const NymGame) = {
 		&nymLevelSplashScreenEnd,
 		&nymLevelMenuEnd,
 		&nymLevelTestingArenaEnd,
+		&nymLevelConnectionScreenEnd,
+		&nymLevelLobbyEnd,
+		&nymLevelGameWorldEnd,
 };
