@@ -18,6 +18,7 @@ struct NymGame {
 	struct {
 		SDL_Window *window;     ///< Window the game is in
 		VK2DTexture backbuffer; ///< Where the game is drawn
+		bool debug;             ///< Run the game in debug mode
 	} Core;
 
 	///< Input things
@@ -31,4 +32,4 @@ struct NymGame {
 };
 
 /// \brief Starts the game
-void nymStart();
+void nymStart(bool debug);

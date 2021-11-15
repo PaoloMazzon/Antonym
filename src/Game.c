@@ -8,11 +8,12 @@
 #include "Nym/Constants.h"
 #include "Nym/UI.h"
 
-static NymGame _nymInitializeGame() {
+static NymGame _nymInitializeGame(bool debug) {
 	NymGame game = nymCalloc(sizeof(struct NymGame));
 
 	// Load save file first
 	game->save = nymSaveLoad(NYM_SAVE_FILE);
+	game->Core.debug = debug;
 
 	// Start SDL, VK2D, JamUtil, and ENet
 	game->Core.window = SDL_CreateWindow(NYM_WINDOW_NAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, NYM_WINDOW_WIDTH, NYM_WINDOW_HEIGHT, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
@@ -47,11 +48,11 @@ static void _nymDeinitializeGame(NymGame game) {
 	nymFree(game);
 }
 
-void nymStart() {
+void nymStart(bool debug) {
 	nymLog(NYM_LOG_LEVEL_MESSAGE, "Antonym started...");
 
 	// Initialize game struct
-	NymGame game = _nymInitializeGame();
+	NymGame game = _nymInitializeGame(debug);
 
 	// Run game
 	bool run = true;

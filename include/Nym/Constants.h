@@ -56,3 +56,9 @@ extern int NYM_CONNECTION_TIMEOUT;
 
 ///< Index of the player character in the player array (character this game is controlling)
 extern int NYM_PLAYER_INDEX;
+
+///< Duration in seconds of the splash screen
+extern double NYM_SPLASH_SCREEN_DURATION;
+
+///< Text displayed on the splash screen
+extern const char *NYM_SPLASH_SCREEN_TEXT;
