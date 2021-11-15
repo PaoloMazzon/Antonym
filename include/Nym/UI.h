@@ -28,6 +28,7 @@ struct NymUITextbox {
 	float maxCharacters;                   ///< Maximum characters in this textbox
 	bool active;                           ///< Whether or not this textbox is currently accepting input
 	bool selectable;                       ///< Can this textbox be selected
+	bool numbersOnly;                      ///< Only accept numbers as input
 };
 
 /// \brief Draws a button to the screen using a sprite with 3 images

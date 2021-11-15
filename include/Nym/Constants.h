@@ -40,7 +40,7 @@ extern const char *NYM_SAVE_FILE;
 extern uint32_t NYM_SAVE_VERSION;
 
 ///< Default port for connecting to hosts
-extern int NYM_DEFAULT_PORT;
+extern const char *NYM_DEFAULT_PORT;
 
 ///< Amount of time in milliseconds to wait before failing to connect to a host
 extern int NYM_CONNECTION_TIMEOUT;

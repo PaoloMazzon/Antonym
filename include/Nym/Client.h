@@ -13,7 +13,7 @@ struct NymClient {
 };
 
 /// \brief Creates a client -- blocking and will return NULL if it fails to connect
-NymClient nymClientCreate(const char *ip);
+NymClient nymClientCreate(const char *ip, const char *port);
 
 /// \brief Destroys a client
 void nymClientDestroy(NymClient client);

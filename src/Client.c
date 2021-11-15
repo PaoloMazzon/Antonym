@@ -4,8 +4,8 @@
 #include "Nym/Util.h"
 #include "Nym/Constants.h"
 
-NymClient nymClientCreate(const char *ip) {
-	NymClient client = nymCalloc(sizeof(struct NymClient));
+NymClient nymClientCreate(const char *ip, const char *port) {
+	NymClient client = nymCalloc(sizeof(struct NymClient)); // TODO: Parse port
 
 	// Create host client
 	client->client = enet_host_create(NULL, 1, 2, 0, 0);

@@ -76,20 +76,22 @@ void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox) {
 
 	// Enter text
 	if (textbox->active) {
-		// Characters
-		for (int i = SDL_SCANCODE_A; i <= SDL_SCANCODE_Z; i++)
-			if (juKeyboardGetKeyPressed(i))
-				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
-
 		// Numbers
 		for (int i = SDL_SCANCODE_1; i <= SDL_SCANCODE_0; i++)
 			if (juKeyboardGetKeyPressed(i))
 				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
 
-		// Symbols
-		for (int i = SDL_SCANCODE_MINUS; i <= SDL_SCANCODE_SLASH; i++)
-			if (juKeyboardGetKeyPressed(i))
-				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+		if (!textbox->numbersOnly) {
+			// Characters
+			for (int i = SDL_SCANCODE_A; i <= SDL_SCANCODE_Z; i++)
+				if (juKeyboardGetKeyPressed(i))
+					_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+
+			// Symbols
+			for (int i = SDL_SCANCODE_MINUS; i <= SDL_SCANCODE_SLASH; i++)
+				if (juKeyboardGetKeyPressed(i))
+					_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+		}
 
 		// Backspace
 		if (juKeyboardGetKeyPressed(SDL_SCANCODE_BACKSPACE) && strlen(textbox->text) > 0) {
@@ -99,8 +101,9 @@ void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox) {
 }
 
 void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox) {
-	vec4 gray = {0.4, 0.4, 0.4, 1};
-	vec4 darkGray = {0.2, 0.2, 0.2, 1};
+	vec4 gray = {0.5, 0.5, 0.5, 1};
+	vec4 textGray = {0.1, 0.1, 0.1, 1};
+	vec4 darkGray = {0.3, 0.3, 0.3, 1};
 	const int w = game->assets->fntUbuntuMono16->characters->w;
 
 	// Set background colour and draw background
@@ -114,7 +117,7 @@ void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox) {
 	if (textbox->active)
 		vk2dRendererSetColourMod(VK2D_BLACK);
 	else
-		vk2dRendererSetColourMod(gray);
+		vk2dRendererSetColourMod(textGray);
 
 	// Draw text input/hint
 	if (strlen(textbox->text) != 0) {

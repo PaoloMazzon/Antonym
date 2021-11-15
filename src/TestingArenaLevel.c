@@ -7,7 +7,7 @@
 
 void nymLevelTestingArenaStart(NymGame game) {
 	// Start online client
-	game->client = nymClientCreate("localhost");
+	game->client = nymClientCreate("localhost", NYM_DEFAULT_PORT);
 	if (game->client == NULL) {
 		nymUICreateMessage("Connection failed", "Failed to connect to host");
 	}

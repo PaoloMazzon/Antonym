@@ -3,19 +3,22 @@
 #include "JamUtil.h"
 
 // Forward declare the asset array
-extern JULoadedAsset ASSETS[17];
+extern JULoadedAsset ASSETS[22];
 
 #ifdef NYMASSETS_IMPLEMENTATION
 JULoadedAsset ASSETS[] = {
     {"data/Sprites.ini"},
     {"data/fonts/TNR16.jufnt"},
     {"data/fonts/UbuntuMono16.jufnt"},
+    {"data/sprites/BackButton.png"},
     {"data/sprites/MenuOptionsButton.png"},
     {"data/sprites/MenuPlayButton.png"},
     {"data/sprites/MenuQuitButton.png"},
     {"data/sprites/MessageBoxConfirmButton.png"},
+    {"data/sprites/PlayButton.png"},
     {"data/sprites/Player1Idle.png"},
     {"data/sprites/Player1Running.png"},
+    {"data/textures/ConnectionScreenBackground.png"},
     {"data/textures/MenuBackground.png"},
     {"data/textures/MessageBoxBackground.png"},
     {"data/sprites/MenuPlayButton.png", 0, 0, 112, 32, 0, 3, 0, 0},
@@ -24,6 +27,8 @@ JULoadedAsset ASSETS[] = {
     {"data/sprites/MessageBoxConfirmButton.png", 0, 0, 32, 16, 0, 3, 0, 0},
     {"data/sprites/Player1Idle.png", 0, 0, 16, 16, 4, 4, 0, 0},
     {"data/sprites/Player1Running.png", 0, 0, 16, 16, 4, 4, 0, 0},
+    {"data/sprites/BackButton.png", 0, 0, 64, 16, 0, 3, 0, 0},
+    {"data/sprites/PlayButton.png", 0, 0, 64, 16, 0, 3, 0, 0},
 };
 #endif
 
@@ -32,12 +37,15 @@ typedef struct NymAssets {
     JUBuffer bufSprites;
     JUFont fntTNR16;
     JUFont fntUbuntuMono16;
+    VK2DTexture texBackButton;
     VK2DTexture texMenuOptionsButton;
     VK2DTexture texMenuPlayButton;
     VK2DTexture texMenuQuitButton;
     VK2DTexture texMessageBoxConfirmButton;
+    VK2DTexture texPlayButton;
     VK2DTexture texPlayer1Idle;
     VK2DTexture texPlayer1Running;
+    VK2DTexture texConnectionScreenBackground;
     VK2DTexture texMenuBackground;
     VK2DTexture texMessageBoxBackground;
     JUSprite sprMenuPlayButton;
@@ -46,6 +54,8 @@ typedef struct NymAssets {
     JUSprite sprMessageBoxConfirmButton;
     JUSprite sprPlayer1Idle;
     JUSprite sprPlayer1Running;
+    JUSprite sprBackButton;
+    JUSprite sprPlayButton;
 } NymAssets;
 
 // Functions to create and destroy the asset struct
@@ -55,16 +65,19 @@ void destroyNymAssets(NymAssets *s);
 #ifdef NYMASSETS_IMPLEMENTATION
 NymAssets *buildNymAssets() {
     NymAssets *s = malloc(sizeof(struct NymAssets));
-    s->loader = juLoaderCreate(ASSETS, 17);
+    s->loader = juLoaderCreate(ASSETS, 22);
     s->bufSprites = juLoaderGetBuffer(s->loader, "data/Sprites.ini");
     s->fntTNR16 = juLoaderGetFont(s->loader, "data/fonts/TNR16.jufnt");
     s->fntUbuntuMono16 = juLoaderGetFont(s->loader, "data/fonts/UbuntuMono16.jufnt");
+    s->texBackButton = juLoaderGetTexture(s->loader, "data/sprites/BackButton.png");
     s->texMenuOptionsButton = juLoaderGetTexture(s->loader, "data/sprites/MenuOptionsButton.png");
     s->texMenuPlayButton = juLoaderGetTexture(s->loader, "data/sprites/MenuPlayButton.png");
     s->texMenuQuitButton = juLoaderGetTexture(s->loader, "data/sprites/MenuQuitButton.png");
     s->texMessageBoxConfirmButton = juLoaderGetTexture(s->loader, "data/sprites/MessageBoxConfirmButton.png");
+    s->texPlayButton = juLoaderGetTexture(s->loader, "data/sprites/PlayButton.png");
     s->texPlayer1Idle = juLoaderGetTexture(s->loader, "data/sprites/Player1Idle.png");
     s->texPlayer1Running = juLoaderGetTexture(s->loader, "data/sprites/Player1Running.png");
+    s->texConnectionScreenBackground = juLoaderGetTexture(s->loader, "data/textures/ConnectionScreenBackground.png");
     s->texMenuBackground = juLoaderGetTexture(s->loader, "data/textures/MenuBackground.png");
     s->texMessageBoxBackground = juLoaderGetTexture(s->loader, "data/textures/MessageBoxBackground.png");
     s->sprMenuPlayButton = juLoaderGetSprite(s->loader, "data/sprites/MenuPlayButton.png");
@@ -73,6 +86,8 @@ NymAssets *buildNymAssets() {
     s->sprMessageBoxConfirmButton = juLoaderGetSprite(s->loader, "data/sprites/MessageBoxConfirmButton.png");
     s->sprPlayer1Idle = juLoaderGetSprite(s->loader, "data/sprites/Player1Idle.png");
     s->sprPlayer1Running = juLoaderGetSprite(s->loader, "data/sprites/Player1Running.png");
+    s->sprBackButton = juLoaderGetSprite(s->loader, "data/sprites/BackButton.png");
+    s->sprPlayButton = juLoaderGetSprite(s->loader, "data/sprites/PlayButton.png");
     return s;
 }
 
