@@ -17,6 +17,7 @@ typedef struct NymPacketServer NymPacketServer;
 typedef struct NymPlayer *NymPlayer;
 typedef struct NymPlayerControls NymPlayerControls;
 typedef struct NymPlayerState NymPlayerState;
+typedef struct NymUITextbox NymUITextbox;
 
 /********************** Enums **********************/
 

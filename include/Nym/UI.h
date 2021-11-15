@@ -20,6 +20,16 @@ struct NymUIMessage {
 	NymUIButton confirmButton;                 ///< The ok button
 };
 
+struct NymUITextbox {
+	char text[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Text input
+	char hint[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Hint text
+	float x;                               ///< X position of the textbox
+	float y;                               ///< Y position of the textbox
+	float maxCharacters;                   ///< Maximum characters in this textbox
+	bool active;                           ///< Whether or not this textbox is currently accepting input
+	bool selectable;                       ///< Can this textbox be selected
+};
+
 /// \brief Draws a button to the screen using a sprite with 3 images
 void nymUIDrawButton(NymGame game, NymUIButton *button);
 
@@ -40,3 +50,9 @@ void nymUIDrawOverly();
 
 /// \brief Draws the message if its active
 void nymUIDrawMessage(NymGame game);
+
+/// \brief Updates a textbox
+void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox);
+
+/// \brief Draws a textbox
+void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox);

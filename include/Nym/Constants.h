@@ -62,3 +62,9 @@ extern double NYM_SPLASH_SCREEN_DURATION;
 
 ///< Text displayed on the splash screen
 extern const char *NYM_SPLASH_SCREEN_TEXT;
+
+///< Maximum number of characters in a textbox
+#define NYM_MAX_TEXTBOX_CHARACTERS 100
+
+///< Max number of characters in a player's name
+#define NYM_NAME_MAX_CHARACTERS 15

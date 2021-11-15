@@ -17,7 +17,7 @@ void nymLevelMenuStart(NymGame game) {
 
 NymLevel nymLevelMenuUpdate(NymGame game) {
 	if (nymUICheckButton(game, &PLAY_BUTTON))
-		return NYM_LEVEL_TESTINGARENA;
+		return NYM_LEVEL_CONNECTIONSCREEN;
 	if (nymUICheckButton(game, &OPTIONS_BUTTON))
 		nymUICreateMessage("Unimplemented", "Under construction.");
 	if (nymUICheckButton(game, &QUIT_BUTTON))

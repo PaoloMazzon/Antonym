@@ -56,3 +56,75 @@ void nymUIDrawMessage(NymGame game) {
 			gMessageBox.active = false;
 	}
 }
+
+void _nymUIAddTextboxCharacter(NymUITextbox *textbox, char c) {
+	if (strlen(textbox->text) < textbox->maxCharacters) {
+		textbox->text[strlen(textbox->text) + 1] = 0;
+		textbox->text[strlen(textbox->text)] = c;
+	}
+}
+
+void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox) {
+	const int w = game->assets->fntUbuntuMono16->characters->w;
+	JURectangle r = {textbox->x, textbox->y, w * textbox->maxCharacters, game->assets->fntUbuntuMono16->newLineHeight};
+
+	// Select the textbox
+	if (juPointInRectangle(&r, game->Input.mx, game->Input.my) && game->Input.ml[0] && textbox->selectable)
+		textbox->active = true;
+	else if (!juPointInRectangle(&r, game->Input.mx, game->Input.my) && game->Input.ml[0])
+		textbox->active = false;
+
+	// Enter text
+	if (textbox->active) {
+		// Characters
+		for (int i = SDL_SCANCODE_A; i <= SDL_SCANCODE_Z; i++)
+			if (juKeyboardGetKeyPressed(i))
+				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+
+		// Numbers
+		for (int i = SDL_SCANCODE_1; i <= SDL_SCANCODE_0; i++)
+			if (juKeyboardGetKeyPressed(i))
+				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+
+		// Symbols
+		for (int i = SDL_SCANCODE_MINUS; i <= SDL_SCANCODE_SLASH; i++)
+			if (juKeyboardGetKeyPressed(i))
+				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+
+		// Backspace
+		if (juKeyboardGetKeyPressed(SDL_SCANCODE_BACKSPACE) && strlen(textbox->text) > 0) {
+			textbox->text[strlen(textbox->text) - 1] = 0;
+		}
+	}
+}
+
+void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox) {
+	vec4 gray = {0.4, 0.4, 0.4, 1};
+	vec4 darkGray = {0.2, 0.2, 0.2, 1};
+	const int w = game->assets->fntUbuntuMono16->characters->w;
+
+	// Set background colour and draw background
+	if (textbox->active)
+		vk2dRendererSetColourMod(gray);
+	else
+		vk2dRendererSetColourMod(darkGray);
+	vk2dDrawRectangle(textbox->x, textbox->y, w * (textbox->maxCharacters + 1), game->assets->fntUbuntuMono16->newLineHeight);
+
+	// Set text colour
+	if (textbox->active)
+		vk2dRendererSetColourMod(VK2D_BLACK);
+	else
+		vk2dRendererSetColourMod(gray);
+
+	// Draw text input/hint
+	if (strlen(textbox->text) != 0) {
+		if ((int) juTime() % 2 && textbox->active)
+			juFontDraw(game->assets->fntUbuntuMono16, textbox->x, textbox->y, "%s|", textbox->text);
+		else
+			juFontDraw(game->assets->fntUbuntuMono16, textbox->x, textbox->y, "%s", textbox->text);
+	} else {
+		juFontDraw(game->assets->fntUbuntuMono16, textbox->x, textbox->y, "%s", textbox->hint);
+	}
+
+	vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
+}
