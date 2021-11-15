@@ -50,3 +50,9 @@ extern int NYM_CONNECTION_TIMEOUT;
 
 ///< Size in bytes of the title of the overlay message
 #define NYM_MESSAGE_TITLE_BUFFER_SIZE 100
+
+///< Max number of players in a game
+#define NYM_MAX_PLAYERS 10
+
+///< Index of the player character in the player array (character this game is controlling)
+extern int NYM_PLAYER_INDEX;

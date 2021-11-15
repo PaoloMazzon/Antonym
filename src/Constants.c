@@ -27,6 +27,8 @@ int NYM_DEFAULT_PORT = 7000;
 
 int NYM_CONNECTION_TIMEOUT = 5000;
 
+int NYM_PLAYER_INDEX = 0;
+
 void(*NYM_LEVEL_START_FUNCTIONS[NYM_LEVEL_MAX])(NymGame) = {
 		&nymLevelSplashScreenStart,
 		&nymLevelMenuStart,

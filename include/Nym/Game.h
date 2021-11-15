@@ -5,12 +5,14 @@
 #include "Nym/Assets.h"
 #include "Nym/Save.h"
 #include "Nym/Client.h"
+#include "Nym/Constants.h"
 
 struct NymGame {
-	NymAssets *assets; ///< Game assets
-	NymSave save;      ///< Game save file
-	NymLevel level;    ///< Current level - do not modify this variable outside of `Game.c`
-	NymClient client;  ///< Client for online multiplayer
+	NymAssets *assets;                  ///< Game assets
+	NymSave save;                       ///< Game save file
+	NymLevel level;                     ///< Current level - do not modify this variable outside of `Game.c`
+	NymClient client;                   ///< Client for online multiplayer
+	NymPlayer players[NYM_MAX_PLAYERS]; ///< All possible players in the game (player character is always 0)
 
 	///< Core stuff like window
 	struct {

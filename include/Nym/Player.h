@@ -38,6 +38,9 @@ void nymPlayerUpdateFromControls(NymGame game, NymPlayer player, NymPlayerContro
 /// \brief Updates a player to a given state
 void nymPlayerUpdateFromState(NymGame game, NymPlayer player, NymPlayerState *state);
 
+/// \brief Draws a player
+void nymPlayerDraw(NymGame game, NymPlayer player);
+
 /// \brief Creates a packet from a players data (provide a packet yourself)
 void nymPlayerCreatePacket(NymPlayer player, NymPacketClient *packet);
 
