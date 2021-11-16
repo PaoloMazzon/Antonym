@@ -24,6 +24,7 @@ typedef struct NymPacketClientMaster NymPacketClientMaster;
 typedef struct NymPacketServerPlayerUpdates NymPacketServerPlayerUpdates;
 typedef struct NymPacketServerMessage NymPacketServerMessage;
 typedef struct NymPacketServerLobby NymPacketServerLobby;
+typedef struct NymPacketServerMaster NymPacketServerMaster;
 
 /********************** Enums **********************/
 

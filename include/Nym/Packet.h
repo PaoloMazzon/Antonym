@@ -71,3 +71,14 @@ struct NymPacketServerMessage {
 struct NymPacketServerLobby {
 	NYM_PACKET_HEADER
 };
+
+
+/// \brief What the server will send to the client
+struct NymPacketServerMaster {
+	NYM_PACKET_HEADER
+	union {
+		NymPacketServerLobby lobby;
+		NymPacketServerMessage message;
+		NymPacketServerPlayerUpdates playerUpdates;
+	};
+};

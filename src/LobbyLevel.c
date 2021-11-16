@@ -42,6 +42,7 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 			NymPacketClientMessage message = {NYM_PACKET_TYPE_CLIENT_MESSAGE, "", strlen(gChatTextbox.text)};
 			strcpy(message.message, gChatTextbox.text);
 			nymClientSendPacket(game->client, &message, sizeof(struct NymPacketClientMessage), true);
+			gChatTextbox.text[0] = 0;
 		}
 
 		return NYM_LEVEL_LOBBY;

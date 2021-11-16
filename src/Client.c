@@ -12,7 +12,7 @@ NymClient nymClientCreate(const char *ip, const char *port) {
 	client->client = enet_host_create(NULL, 1, 2, 0, 0);
 	if (client->client != NULL) {
 		// Create peer
-		client->address.port = NYM_DEFAULT_PORT;
+		client->address.port = 7000; // TODO: Use the port
 		enet_address_set_host(&client->address, ip);
 		client->peer = enet_host_connect(client->client, &client->address, 2, 0);
 
@@ -20,9 +20,9 @@ NymClient nymClientCreate(const char *ip, const char *port) {
 		ENetEvent event;
 		if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
 			enet_host_flush(client->client);
-			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\".", ip);
+			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\" on port [%s].", ip, port);
 		} else {
-			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\".", ip);
+			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\" on port [%s].", ip, port);
 			enet_host_destroy(client->client);
 			nymFree(client);
 			client = NULL;
@@ -58,7 +58,7 @@ NymClientStatus nymClientUpdate(NymClient client, NymPacketClientMaster *packet)
 
 	// Process whatever event might be waiting
 	ENetEvent event;
-	if (enet_host_service(client->client, &event, 0) > 0) {
+	if (enet_host_service(client->client, &event, 0) >= 0) {
 		// We recieved a packet, ship it off
 		if (event.type == ENET_EVENT_TYPE_RECEIVE) {
 			if (sizeof(struct NymPacketClientMaster) - NYM_PACKET_HEADER_OFFSET < event.packet->dataLength) {
@@ -69,7 +69,8 @@ NymClientStatus nymClientUpdate(NymClient client, NymPacketClientMaster *packet)
 			}
 			enet_packet_destroy(event.packet);
 		}
-		event.peer -> data = NULL;
+		if (event.peer != NULL)
+			event.peer->data = NULL;
 	} else {
 		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to update enet.");
 		return NYM_CLIENT_STATUS_ERROR;

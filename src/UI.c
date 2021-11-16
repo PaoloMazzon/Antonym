@@ -91,6 +91,10 @@ void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox) {
 			for (int i = SDL_SCANCODE_MINUS; i <= SDL_SCANCODE_SLASH; i++)
 				if (juKeyboardGetKeyPressed(i))
 					_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
+
+			// Space bar
+			if (juKeyboardGetKeyPressed(SDL_SCANCODE_SPACE))
+				_nymUIAddTextboxCharacter(textbox, ' ');
 		}
 
 		// Backspace
@@ -120,7 +124,7 @@ void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox) {
 		vk2dRendererSetColourMod(textGray);
 
 	// Draw text input/hint
-	if (strlen(textbox->text) != 0) {
+	if (textbox->active || strlen(textbox->text) > 0) {
 		if ((int) juTime() % 2 && textbox->active)
 			juFontDraw(game->assets->fntUbuntuMono16, textbox->x, textbox->y, "%s|", textbox->text);
 		else
