@@ -8,6 +8,9 @@
 ///< All packet structs must start with this
 #define NYM_PACKET_HEADER NymPacketType type;
 
+///< Amount of bytes the above header is
+#define NYM_PACKET_HEADER_OFFSET sizeof(NymPacketType)
+
 /// \brief All possible controls the player may use
 struct NymPlayerControls {
 	float moveX;     ///< Movement of the player in the x direction from -1 to 1
@@ -42,6 +45,16 @@ struct NymPacketClientMessage {
 /// \brief Client side information on the user's lobby choices
 struct NymPacketClientLobby {
 	NYM_PACKET_HEADER
+};
+
+/// \brief What the client will return to the game loop
+struct NymPacketClientMaster {
+	NYM_PACKET_HEADER
+	union {
+		NymPacketClientLobby lobby;
+		NymPacketClientMessage message;
+		NymPacketClientPlayerUpdate playerUpdate;
+	};
 };
 
 /// \brief Server sending information on all player's whereabouts

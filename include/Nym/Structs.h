@@ -17,6 +17,13 @@ typedef struct NymPlayer *NymPlayer;
 typedef struct NymPlayerControls NymPlayerControls;
 typedef struct NymPlayerState NymPlayerState;
 typedef struct NymUITextbox NymUITextbox;
+typedef struct NymPacketClientPlayerUpdate NymPacketClientPlayerUpdate;
+typedef struct NymPacketClientMessage NymPacketClientMessage;
+typedef struct NymPacketClientLobby NymPacketClientLobby;
+typedef struct NymPacketClientMaster NymPacketClientMaster;
+typedef struct NymPacketServerPlayerUpdates NymPacketServerPlayerUpdates;
+typedef struct NymPacketServerMessage NymPacketServerMessage;
+typedef struct NymPacketServerLobby NymPacketServerLobby;
 
 /********************** Enums **********************/
 
@@ -42,6 +49,7 @@ typedef enum {
 
 /// \brief The type of packet structs
 typedef enum {
+	NYM_PACKET_TYPE_NONE = 0,                 ///< There is no packet here
 	NYM_PACKET_TYPE_CLIENT_PLAYERUPDATE = 1,  ///< Information on this player's movements
 	NYM_PACKET_TYPE_CLIENT_MESSAGE = 2,       ///< Client sent a chat message
 	NYM_PACKET_TYPE_CLIENT_LOBBY = 3,         ///< Client chose some lobby information
@@ -50,3 +58,13 @@ typedef enum {
 	NYM_PACKET_TYPE_SERVER_LOBBY = 6,         ///< Server's lobby choices from other players
 	NYM_PACKET_TYPE_MAX = 6,                  ///< Max number of packet types
 } NymPacketType;
+
+/// \brief Status of the client
+typedef enum {
+	NYM_CLIENT_STATUS_OK = 0,           ///< Business as usual
+	NYM_CLIENT_STATUS_DISCONNECTED = 1, ///< Disconnected from server
+	NYM_CLIENT_STATUS_TIMEOUT = 2,      ///< Server timed out
+	NYM_CLIENT_STATUS_KICKED = 3,       ///< Server kicked this client
+	NYM_CLIENT_STATUS_ERROR = 4,        ///< An error occurred
+	NYM_CLIENT_STATUS_MAX = 5,          ///< Max number of status codes
+} NymClientStatus;
