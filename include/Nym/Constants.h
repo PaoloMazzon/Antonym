@@ -68,3 +68,6 @@ extern const char *NYM_SPLASH_SCREEN_TEXT;
 
 ///< Max number of characters in a player's name
 #define NYM_NAME_MAX_CHARACTERS 15
+
+///< Max number of characters in a chat message
+#define NYM_MAX_CHAT_CHARACTERS 30

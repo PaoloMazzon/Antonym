@@ -1,5 +1,8 @@
 /// \file Util.c
 /// \author Paolo Mazzon
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
 #include "Nym/Util.h"
 #include "Nym/Constants.h"
 

@@ -2,6 +2,7 @@
 /// \author Paolo Mazzon
 /// \brief Tools for the UI
 #pragma once
+#include "JamUtil.h"
 #include "Nym/Structs.h"
 #include "Nym/Constants.h"
 

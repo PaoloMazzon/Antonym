@@ -3,7 +3,6 @@
 /// \brief Forward declares all structs and important types
 #pragma once
 #include <stdint.h>
-#include "JamUtil.h"
 
 /********************** Forward-Declare Structs **********************/
 
@@ -40,3 +39,14 @@ typedef enum {
 	NYM_LEVEL_MAX = 6,              ///< Total number of levels
 	NYM_LEVEL_QUIT = 500,           ///< Quit the game
 } NymLevel;
+
+/// \brief The type of packet structs
+typedef enum {
+	NYM_PACKET_TYPE_CLIENT_PLAYERUPDATE = 1,  ///< Information on this player's movements
+	NYM_PACKET_TYPE_CLIENT_MESSAGE = 2,       ///< Client sent a chat message
+	NYM_PACKET_TYPE_CLIENT_LOBBY = 3,         ///< Client chose some lobby information
+	NYM_PACKET_TYPE_SERVER_PLAYERUPDATES = 4, ///< Server telling the clients other player's information
+	NYM_PACKET_TYPE_SERVER_MESSAGE = 5,       ///< Server providing new chat message
+	NYM_PACKET_TYPE_SERVER_LOBBY = 6,         ///< Server's lobby choices from other players
+	NYM_PACKET_TYPE_MAX = 6,                  ///< Max number of packet types
+} NymPacketType;

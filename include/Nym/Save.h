@@ -2,6 +2,7 @@
 /// \author Paolo Mazzon
 /// \brief Handles saving and loading data for the game
 #pragma once
+#include "JamUtil.h"
 #include "Nym/Structs.h"
 
 /// \brief All save data stored for Antonym

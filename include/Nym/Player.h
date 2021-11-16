@@ -2,25 +2,9 @@
 /// \author Paolo Mazzon
 /// \brief
 #pragma once
+#include "JamUtil.h"
 #include "Nym/Structs.h"
-
-/// \brief All possible controls the player may use
-struct NymPlayerControls {
-	float moveX;     ///< Movement of the player in the x direction from -1 to 1
-	float moveY;     ///< Movement of the player in the y direction from -1 to 1
-	float direction; ///< Direction the player is
-	bool fire;       ///< Whether or not fire was pressed
-};
-
-/// \brief Mandatory data needed to update the player from raw data
-struct NymPlayerState {
-	double x;         ///< X coordinate of this player
-	double y;         ///< Y coordinate of this player
-	double hsp;       ///< Horizontal speed of this player
-	double vsp;       ///< Vertical speed of this player
-	double health;    ///< Current health
-	double maxHealth; ///< New health
-};
+#include "Nym/Packet.h"
 
 /// \brief A player in the game, AI, human online, or this computer's player
 struct NymPlayer {
