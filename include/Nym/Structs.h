@@ -25,6 +25,7 @@ typedef struct NymPacketServerPlayerUpdates NymPacketServerPlayerUpdates;
 typedef struct NymPacketServerMessage NymPacketServerMessage;
 typedef struct NymPacketServerLobby NymPacketServerLobby;
 typedef struct NymPacketServerMaster NymPacketServerMaster;
+typedef struct NymUIChatbox NymUIChatbox;
 
 /********************** Enums **********************/
 

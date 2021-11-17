@@ -5,6 +5,19 @@
 
 static NymUIMessage gMessageBox;
 
+static NymUIChatbox gChatbox = {
+		{
+			"",
+			"",
+			0,
+			0,
+			NYM_MAX_CHAT_CHARACTERS,
+			false,
+			false,
+			false,
+		}
+};
+
 void nymUIDrawButton(NymGame game, NymUIButton *button) {
 	// TODO: Lock to the UI camera
 	JURectangle r = {button->x, button->y, button->spr->Internal.w, button->spr->Internal.h};
@@ -81,7 +94,7 @@ void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox) {
 			if (juKeyboardGetKeyPressed(i))
 				_nymUIAddTextboxCharacter(textbox, SDL_GetScancodeName(i)[0]);
 
-		if (!textbox->numbersOnly) {
+		if (!textbox->numbersOnly) { // TODO: The shift key for lowercase and symbols
 			// Characters
 			for (int i = SDL_SCANCODE_A; i <= SDL_SCANCODE_Z; i++)
 				if (juKeyboardGetKeyPressed(i))
@@ -133,5 +146,65 @@ void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox) {
 		juFontDraw(game->assets->fntUbuntuMono16, textbox->x, textbox->y, "%s", textbox->hint);
 	}
 
+	vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
+}
+
+float nymUIGetChatWidth(NymGame game) {
+	return (NYM_MAX_CHAT_CHARACTERS + 1) * game->assets->fntUbuntuMono16->characters[0].w;
+}
+
+float nymUIGetChatHeight(NymGame game) {
+	return (NYM_MAX_CHAT_MESSAGES + 1) * game->assets->fntUbuntuMono16->newLineHeight;
+}
+
+void nymUISelectChat(NymGame game) {
+	gChatbox.chat.active = true;
+}
+
+bool nymUIChatSelected(NymGame game) {
+	return gChatbox.chat.active;
+}
+
+void nymUIAddChatMessage(NymGame game, const char *message) {
+	// 0 is the newest message displayed closest to the text input, like monster hunter world for example
+	for (int i = 1; i < NYM_MAX_CHAT_MESSAGES; i++)
+		strcpy(gChatbox.messages[i], gChatbox.messages[i - 1]);
+	strcpy(gChatbox.messages[0], message);
+}
+
+void nymUIGetChatInput(NymGame game, char *out) {
+	strcpy(out, gChatbox.chat.text);
+	gChatbox.chat.text[0] = 0;
+}
+
+void nymUIUpdateChat(NymGame game, float x, float y) {
+	gChatbox.chat.x = x;
+	gChatbox.chat.y = nymUIGetChatHeight(game) - game->assets->fntUbuntuMono16->newLineHeight;
+	nymUIUpdateTextbox(game, &gChatbox.chat);
+}
+
+void nymUIDrawChat(NymGame game, float x, float y, bool drawInput, float alpha) {
+	float w = nymUIGetChatWidth(game);
+	float h = nymUIGetChatHeight(game);
+	vec4 background = {0.5, 0.5, 0.5, alpha};
+	vec4 text = {0.8, 0.8, 0.8, alpha};
+
+	// Update coords and draw text input
+	gChatbox.chat.x = x;
+	gChatbox.chat.y = y + (h - game->assets->fntUbuntuMono16->newLineHeight);
+	if (drawInput)
+		nymUIDrawTextbox(game, &gChatbox.chat);
+
+	// Draw background
+	vk2dRendererSetColourMod(background);
+	vk2dDrawRectangle(x, y, w, h);
+
+	// Draw messages
+	int j = 0;
+	vk2dRendererSetColourMod(text);
+	for (int i = NYM_MAX_CHAT_MESSAGES - 1; i >= 0; i--) {
+		juFontDraw(game->assets->fntUbuntuMono16, x, y + (game->assets->fntUbuntuMono16->newLineHeight * j), "%s", gChatbox.messages[i]);
+		j++;
+	}
 	vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
 }

@@ -21,6 +21,7 @@ struct NymUIMessage {
 	NymUIButton confirmButton;                 ///< The ok button
 };
 
+/// \brief Textbox for text entry
 struct NymUITextbox {
 	char text[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Text input
 	char hint[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Hint text
@@ -30,6 +31,12 @@ struct NymUITextbox {
 	bool active;                           ///< Whether or not this textbox is currently accepting input
 	bool selectable;                       ///< Can this textbox be selected
 	bool numbersOnly;                      ///< Only accept numbers as input
+};
+
+/// \brief Chatbox for online comms
+struct NymUIChatbox {
+	NymUITextbox chat; ///< Text input for chat
+	char messages[NYM_MAX_CHAT_CHARACTERS][NYM_MAX_CHAT_MESSAGES]; ///< Previous chat messages
 };
 
 /// \brief Draws a button to the screen using a sprite with 3 images
@@ -58,3 +65,27 @@ void nymUIUpdateTextbox(NymGame game, NymUITextbox *textbox);
 
 /// \brief Draws a textbox
 void nymUIDrawTextbox(NymGame game, NymUITextbox *textbox);
+
+/// \brief Gets chat windows width
+float nymUIGetChatWidth(NymGame game);
+
+/// \brief Gets chat windows height
+float nymUIGetChatHeight(NymGame game);
+
+/// \brief Forces text input into chat
+void nymUISelectChat(NymGame game);
+
+/// \brief Returns whether or not chat is currently selected
+bool nymUIChatSelected(NymGame game);
+
+/// \brief Adds a new message to the chat box, pushing back the old ones
+void nymUIAddChatMessage(NymGame game, const char *message);
+
+/// \brief Copies the chat text into a string and clears the chat message
+void nymUIGetChatInput(NymGame game, char *out);
+
+/// \brief Updates chat
+void nymUIUpdateChat(NymGame game, float x, float y);
+
+/// \brief Draws chat
+void nymUIDrawChat(NymGame game, float x, float y, bool drawInput, float alpha);

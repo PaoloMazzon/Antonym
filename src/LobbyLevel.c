@@ -7,16 +7,8 @@
 #include "Nym/Packet.h"
 #include "Nym/UI.h"
 
-NymUITextbox gChatTextbox = {
-		"",
-		"Chat",
-		32,
-		225-48,
-		30,
-		true,
-		true,
-		false,
-};
+const float CHAT_X = 16;
+const float CHAT_Y = 16;
 
 void nymLevelLobbyStart(NymGame game) {
 
@@ -35,19 +27,21 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 		// Handle the new packet
 		if (packet.type != NYM_PACKET_TYPE_NONE) {
 			if (packet.type == NYM_PACKET_TYPE_SERVER_MESSAGE) {
-				// TODO: An actual chat box
+				nymUIAddChatMessage(game, packet.message.message);
 			}
 
 			// TODO: Handle other packet types
 		}
 
 		// Chat
-		nymUIUpdateTextbox(game, &gChatTextbox);
-		if (juKeyboardGetKeyPressed(SDL_SCANCODE_RETURN) && gChatTextbox.active) {
-			NymPacketClientMessage message = {NYM_PACKET_TYPE_CLIENT_MESSAGE, "", strlen(gChatTextbox.text)};
-			strcpy(message.message, gChatTextbox.text);
+		nymUIUpdateChat(game, CHAT_X, CHAT_Y);
+		if (juKeyboardGetKeyPressed(SDL_SCANCODE_RETURN) && nymUIChatSelected(game)) {
+			NymPacketClientMessage message = {NYM_PACKET_TYPE_CLIENT_MESSAGE, "", 0};
+			nymUIGetChatInput(game, message.message);
+			message.len = strlen(message.message);
 			nymClientSendPacket(game->client, &message, sizeof(struct NymPacketClientMessage), true);
-			gChatTextbox.text[0] = 0;
+		} else if (juKeyboardGetKeyPressed(SDL_SCANCODE_RETURN) && !nymUIChatSelected(game)) {
+			nymUISelectChat(game);
 		}
 
 		return NYM_LEVEL_LOBBY;
@@ -57,7 +51,7 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 }
 
 void nymLevelLobbyDraw(NymGame game) {
-	nymUIDrawTextbox(game, &gChatTextbox);
+	nymUIDrawChat(game, CHAT_X, CHAT_Y, true, 1);
 }
 
 void nymLevelLobbyEnd(NymGame game) {
