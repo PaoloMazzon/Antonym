@@ -65,6 +65,8 @@ struct NymPacketServerPlayerUpdates {
 /// \brief When a new message is recieved from the server
 struct NymPacketServerMessage {
 	NYM_PACKET_HEADER
+	char message[NYM_MAX_CHAT_CHARACTERS]; ///< Contents of the message
+	int len;                               ///< Length of the chat message
 };
 
 /// \brief Server sending information on the lobby

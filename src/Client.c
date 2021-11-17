@@ -45,7 +45,7 @@ NymClientStatus nymClientSendPacket(NymClient client, void *data, uint32_t size,
 	return NYM_CLIENT_STATUS_OK;
 }
 
-NymClientStatus nymClientUpdate(NymClient client, NymPacketClientMaster *packet) {
+NymClientStatus nymClientUpdate(NymClient client, NymPacketServerMaster *packet) {
 	// Just in case, we set the packet type to none
 	packet->type = NYM_PACKET_TYPE_NONE;
 
@@ -64,7 +64,7 @@ NymClientStatus nymClientUpdate(NymClient client, NymPacketClientMaster *packet)
 			if (sizeof(struct NymPacketClientMaster) - NYM_PACKET_HEADER_OFFSET < event.packet->dataLength) {
 				nymLog(NYM_LOG_LEVEL_WARNING, "Bad packet of size %i received.", event.packet->dataLength);
 			} else {
-				memcpy((void*)packet + NYM_PACKET_HEADER_OFFSET, event.packet->data, event.packet->dataLength);
+				memcpy(&packet->message, event.packet->data, event.packet->dataLength);
 				packet->type = packet->lobby.type;
 			}
 			enet_packet_destroy(event.packet);

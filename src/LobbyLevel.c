@@ -1,5 +1,6 @@
 /// \file LobbyLevel.c
 /// \author Paolo Mazzon
+#include "Nym/Util.h"
 #include "Nym/Levels.h"
 #include "Nym/Game.h"
 #include "Nym/Client.h"
@@ -24,7 +25,7 @@ void nymLevelLobbyStart(NymGame game) {
 NymLevel nymLevelLobbyUpdate(NymGame game) {
 	if (game->client != NULL) {
 		// Update online stuff
-		NymPacketClientMaster packet;
+		NymPacketServerMaster packet;
 		if (nymClientUpdate(game->client, &packet) != NYM_CLIENT_STATUS_OK) {
 			nymUICreateMessage("Error", "Disconnected from host");
 			nymClientDestroy(game->client);
@@ -33,7 +34,11 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 
 		// Handle the new packet
 		if (packet.type != NYM_PACKET_TYPE_NONE) {
-			// TODO: This
+			if (packet.type == NYM_PACKET_TYPE_SERVER_MESSAGE) {
+				// TODO: An actual chat box
+			}
+
+			// TODO: Handle other packet types
 		}
 
 		// Chat

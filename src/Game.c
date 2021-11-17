@@ -7,6 +7,7 @@
 #include "Nym/Util.h"
 #include "Nym/Constants.h"
 #include "Nym/UI.h"
+#include "Nym/Client.h"
 
 static NymGame _nymInitializeGame(bool debug) {
 	NymGame game = nymCalloc(sizeof(struct NymGame));
@@ -37,6 +38,7 @@ static NymGame _nymInitializeGame(bool debug) {
 
 static void _nymDeinitializeGame(NymGame game) {
 	// Destroy all contexts in order
+	nymClientDestroy(game->client);
 	vk2dRendererWait();
 	enet_deinitialize();
 	vk2dTextureFree(game->Core.backbuffer);

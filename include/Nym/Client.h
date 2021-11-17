@@ -24,7 +24,7 @@ NymClient nymClientCreate(const char *ip, const char *port);
 NymClientStatus nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable);
 
 /// \brief Should be called every frame (if this returns something other than NYM_CLIENT_STATUS_OK you gotta free the client)
-NymClientStatus nymClientUpdate(NymClient client, NymPacketClientMaster *packet);
+NymClientStatus nymClientUpdate(NymClient client, NymPacketServerMaster *packet);
 
 /// \brief Destroys a client
 void nymClientDestroy(NymClient client);
