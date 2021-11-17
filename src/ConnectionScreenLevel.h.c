@@ -51,6 +51,9 @@ static NymUIButton gPlayButton = {
 void nymLevelConnectionScreenStart(NymGame game) {
 	gBackButton.spr = game->assets->sprBackButton;
 	gPlayButton.spr = game->assets->sprPlayButton;
+	strcpy(gIPTextbox.text, game->save->lastIP);
+	strcpy(gPortTextbox.text, game->save->lastPort);
+	strcpy(gNameTextbox.text, game->save->lastName);
 }
 
 NymLevel nymLevelConnectionScreenUpdate(NymGame game) {
@@ -63,6 +66,12 @@ NymLevel nymLevelConnectionScreenUpdate(NymGame game) {
 	} else if (nymUICheckButton(game, &gPlayButton)) {
 		game->client = nymClientCreate(gIPTextbox.text, gPortTextbox.text);
 		if (game->client != NULL) {
+			// Save new connection presets then go to the lobby
+			strcpy(game->save->lastIP, gIPTextbox.text);
+			strcpy(game->save->lastPort, gPortTextbox.text);
+			strcpy(game->save->lastName, gNameTextbox.text);
+			nymSaveFlush(game->save, NYM_SAVE_FILE);
+
 			return NYM_LEVEL_LOBBY;
 		} else {
 			nymUICreateMessage("Connection failed", "Failed to connect to host");
