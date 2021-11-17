@@ -157,8 +157,8 @@ float nymUIGetChatHeight(NymGame game) {
 	return (NYM_MAX_CHAT_MESSAGES + 1) * game->assets->fntUbuntuMono16->newLineHeight;
 }
 
-void nymUISelectChat(NymGame game) {
-	gChatbox.chat.active = true;
+void nymUISelectChat(NymGame game, bool select) {
+	gChatbox.chat.active = select;
 }
 
 bool nymUIChatSelected(NymGame game) {
@@ -167,9 +167,9 @@ bool nymUIChatSelected(NymGame game) {
 
 void nymUIAddChatMessage(NymGame game, const char *message) {
 	// 0 is the newest message displayed closest to the text input, like monster hunter world for example
-	for (int i = 1; i < NYM_MAX_CHAT_MESSAGES; i++)
-		strcpy(gChatbox.messages[i], gChatbox.messages[i - 1]);
-	strcpy(gChatbox.messages[0], message);
+	for (int i = NYM_MAX_CHAT_MESSAGES - 1; i > 0; i--)
+		strncpy(gChatbox.messages[i], gChatbox.messages[i - 1], NYM_MAX_CHAT_CHARACTERS);
+	strncpy(gChatbox.messages[0], message, NYM_MAX_CHAT_CHARACTERS);
 }
 
 void nymUIGetChatInput(NymGame game, char *out) {
@@ -186,7 +186,7 @@ void nymUIUpdateChat(NymGame game, float x, float y) {
 void nymUIDrawChat(NymGame game, float x, float y, bool drawInput, float alpha) {
 	float w = nymUIGetChatWidth(game);
 	float h = nymUIGetChatHeight(game);
-	vec4 background = {0.5, 0.5, 0.5, alpha};
+	vec4 background = {0.35, 0.35, 0.35, alpha};
 	vec4 text = {0.8, 0.8, 0.8, alpha};
 
 	// Update coords and draw text input
@@ -197,7 +197,7 @@ void nymUIDrawChat(NymGame game, float x, float y, bool drawInput, float alpha) 
 
 	// Draw background
 	vk2dRendererSetColourMod(background);
-	vk2dDrawRectangle(x, y, w, h);
+	vk2dDrawRectangle(x, y, w, h - game->assets->fntUbuntuMono16->newLineHeight);
 
 	// Draw messages
 	int j = 0;

@@ -23,8 +23,8 @@ struct NymUIMessage {
 
 /// \brief Textbox for text entry
 struct NymUITextbox {
-	char text[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Text input
-	char hint[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Hint text
+	char text[NYM_MAX_TEXTBOX_CHARACTERS + 1]; ///< Text input
+	char hint[NYM_MAX_TEXTBOX_CHARACTERS + 1]; ///< Hint text
 	float x;                               ///< X position of the textbox
 	float y;                               ///< Y position of the textbox
 	float maxCharacters;                   ///< Maximum characters in this textbox
@@ -36,7 +36,7 @@ struct NymUITextbox {
 /// \brief Chatbox for online comms
 struct NymUIChatbox {
 	NymUITextbox chat; ///< Text input for chat
-	char messages[NYM_MAX_CHAT_CHARACTERS][NYM_MAX_CHAT_MESSAGES]; ///< Previous chat messages
+	char messages[NYM_MAX_CHAT_MESSAGES][NYM_MAX_CHAT_CHARACTERS + 1]; ///< Previous chat messages
 };
 
 /// \brief Draws a button to the screen using a sprite with 3 images
@@ -73,7 +73,7 @@ float nymUIGetChatWidth(NymGame game);
 float nymUIGetChatHeight(NymGame game);
 
 /// \brief Forces text input into chat
-void nymUISelectChat(NymGame game);
+void nymUISelectChat(NymGame game, bool select);
 
 /// \brief Returns whether or not chat is currently selected
 bool nymUIChatSelected(NymGame game);

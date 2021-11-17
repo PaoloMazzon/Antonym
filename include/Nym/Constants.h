@@ -70,7 +70,7 @@ extern const char *NYM_SPLASH_SCREEN_TEXT;
 #define NYM_NAME_MAX_CHARACTERS 15
 
 ///< Max number of characters in a chat message
-#define NYM_MAX_CHAT_CHARACTERS 40
+#define NYM_MAX_CHAT_CHARACTERS 45
 
 ///< Max number of chat messages on screen at once
 #define NYM_MAX_CHAT_MESSAGES 5

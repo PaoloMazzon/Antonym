@@ -40,8 +40,9 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 			nymUIGetChatInput(game, message.message);
 			message.len = strlen(message.message);
 			nymClientSendPacket(game->client, &message, sizeof(struct NymPacketClientMessage), true);
+			nymUISelectChat(game, false);
 		} else if (juKeyboardGetKeyPressed(SDL_SCANCODE_RETURN) && !nymUIChatSelected(game)) {
-			nymUISelectChat(game);
+			nymUISelectChat(game, true);
 		}
 
 		return NYM_LEVEL_LOBBY;
