@@ -8,10 +8,11 @@ void nymLevelSplashScreenStart(NymGame game) {
 }
 
 NymLevel nymLevelSplashScreenUpdate(NymGame game) {
-	if (game->Core.debug || juTime() > NYM_SPLASH_SCREEN_DURATION || juKeyboardGetKey(SDL_SCANCODE_SPACE) || game->Input.ml[0])
+	// TODO: Uncomment for actual releases
+	//if (game->Core.debug || juTime() > NYM_SPLASH_SCREEN_DURATION || juKeyboardGetKey(SDL_SCANCODE_SPACE) || game->Input.ml[0])
 		return NYM_LEVEL_MENU;
-	else
-		return NYM_LEVEL_SPLASH_SCREEN;
+	//else
+	//	return NYM_LEVEL_SPLASH_SCREEN;
 }
 
 void nymLevelSplashScreenDraw(NymGame game) {
