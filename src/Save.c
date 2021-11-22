@@ -17,9 +17,9 @@ void _nymSaveCreateDefault(NymSave save) {
 
 // Loads a save from a buffer assuming the save version is already set
 void _nymSaveLoad(JUBuffer buffer, NymSave save) {
-	if (save->saveVersion == NYM_SAVE_VERSION && buffer->size == sizeof(struct NymSave)) {
+	if (save->saveVersion == NYM_SAVE_VERSION && buffer->size - 1 == sizeof(struct NymSave)) {
 		// Latest save version - just copy buffer over
-		memcpy(save, buffer->data, buffer->size);
+		memcpy(save, buffer->data, buffer->size - 1);
 	} else {
 		// Corrupt/incompatible save version
 		nymLog(NYM_LOG_LEVEL_ERROR, "Save file is corrupt, creating new default save.");
