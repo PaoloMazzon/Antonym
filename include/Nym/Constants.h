@@ -83,3 +83,6 @@ extern int NYM_PLAYER_CHARACTER;
 
 ///< ID of a player that does not exist
 extern int NYM_PLAYER_INVALID;
+
+///< Max health of a player
+extern double NYM_PLAYER_MAX_HP;

@@ -13,7 +13,7 @@ struct NymPlayer {
 };
 
 /// \brief Creates a player
-NymPlayer nymPlayerCreate(uint32_t id, JUSprite sprite, float x, float y);
+NymPlayer nymPlayerCreate(NymPlayerID id, int sprite, float x, float y);
 
 /// \brief Updates a player based on provided input
 void nymPlayerUpdateFromControls(NymGame game, NymPlayer player, NymPlayerControls *controls);
