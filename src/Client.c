@@ -1,9 +1,12 @@
 /// \file Client.c
 /// \author Paolo Mazzon
+#include "JamUtil.h"
 #include "Nym/Client.h"
 #include "Nym/Util.h"
 #include "Nym/Constants.h"
 #include "Nym/Packet.h"
+#include "Nym/Game.h"
+#include "Nym/Player.h"
 
 NymClient nymClientCreate(const char *ip, const char *port) {
 	NymClient client = nymCalloc(sizeof(struct NymClient)); // TODO: Parse port
@@ -20,6 +23,7 @@ NymClient nymClientCreate(const char *ip, const char *port) {
 		ENetEvent event;
 		if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
 			enet_host_flush(client->client);
+			client->lastTime = juTime();
 			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\" on port [%s].", ip, port);
 		} else {
 			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\" on port [%s].", ip, port);
@@ -45,7 +49,7 @@ NymClientStatus nymClientSendPacket(NymClient client, void *data, uint32_t size,
 	return NYM_CLIENT_STATUS_OK;
 }
 
-NymClientStatus nymClientUpdate(NymClient client, NymPacketServerMaster *packet) {
+NymClientStatus nymClientUpdate(NymGame game, NymClient client, NymPacketServerMaster *packet) {
 	// Just in case, we set the packet type to none
 	packet->type = NYM_PACKET_TYPE_NONE;
 
@@ -74,6 +78,16 @@ NymClientStatus nymClientUpdate(NymClient client, NymPacketServerMaster *packet)
 	} else {
 		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to update enet.");
 		return NYM_CLIENT_STATUS_ERROR;
+	}
+
+	// Check if we need to send a new general packet (for game state)
+	if (juTime() - client->lastTime >= NYM_PACKET_DELAY / 1000) {
+		// Create packet for player state and send it
+		NymPacketClientPlayerUpdate playerPacket = {NYM_PACKET_TYPE_CLIENT_PLAYERUPDATE};
+		playerPacket.state = game->players[NYM_PLAYER_INDEX]->state;
+		nymClientSendPacket(client, &playerPacket, sizeof(struct NymPacketClientPlayerUpdate), false);
+
+		client->lastTime = juTime();
 	}
 
 	return NYM_CLIENT_STATUS_OK;

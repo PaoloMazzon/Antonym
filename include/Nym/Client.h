@@ -10,6 +10,7 @@ struct NymClient {
 	ENetHost *client;    ///< Client
 	ENetPeer *peer;      ///< Connection to the remote host
 	ENetAddress address; ///< Address of the host
+	double lastTime;     ///< Time since the last general packet was sent
 };
 
 /// \brief Creates a client -- blocking and will return NULL if it fails to connect
@@ -24,7 +25,7 @@ NymClient nymClientCreate(const char *ip, const char *port);
 NymClientStatus nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable);
 
 /// \brief Should be called every frame (if this returns something other than NYM_CLIENT_STATUS_OK you gotta free the client)
-NymClientStatus nymClientUpdate(NymClient client, NymPacketServerMaster *packet);
+NymClientStatus nymClientUpdate(NymGame game, NymClient client, NymPacketServerMaster *packet);
 
 /// \brief Destroys a client
 void nymClientDestroy(NymClient client);

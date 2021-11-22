@@ -18,7 +18,7 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 	if (game->client != NULL) {
 		// Update online stuff
 		NymPacketServerMaster packet;
-		if (nymClientUpdate(game->client, &packet) != NYM_CLIENT_STATUS_OK) {
+		if (nymClientUpdate(game, game->client, &packet) != NYM_CLIENT_STATUS_OK) {
 			nymUICreateMessage("Error", "Disconnected from host");
 			nymClientDestroy(game->client);
 			game->client = NULL;

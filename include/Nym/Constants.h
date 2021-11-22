@@ -74,3 +74,12 @@ extern const char *NYM_SPLASH_SCREEN_TEXT;
 
 ///< Max number of chat messages on screen at once
 #define NYM_MAX_CHAT_MESSAGES 5
+
+///< How long between sending packets to the server
+extern double NYM_PACKET_DELAY;
+
+///< Index of the local player in the player array
+extern int NYM_PLAYER_CHARACTER;
+
+///< ID of a player that does not exist
+extern int NYM_PLAYER_INVALID;

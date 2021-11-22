@@ -4,6 +4,10 @@
 #pragma once
 #include <stdint.h>
 
+/********************** Typedefs **********************/
+
+typedef int32_t NymPlayerID;
+
 /********************** Forward-Declare Structs **********************/
 
 typedef struct NymGame *NymGame;
@@ -26,6 +30,7 @@ typedef struct NymPacketServerMessage NymPacketServerMessage;
 typedef struct NymPacketServerLobby NymPacketServerLobby;
 typedef struct NymPacketServerMaster NymPacketServerMaster;
 typedef struct NymUIChatbox NymUIChatbox;
+typedef struct NymPacketServerConnection NymPacketServerConnection;
 
 /********************** Enums **********************/
 
@@ -70,3 +75,12 @@ typedef enum {
 	NYM_CLIENT_STATUS_ERROR = 4,        ///< An error occurred
 	NYM_CLIENT_STATUS_MAX = 5,          ///< Max number of status codes
 } NymClientStatus;
+
+/// \brief Whether this is a new connection or a disconnect for connection packets
+typedef enum {
+	NYM_CONNECT_NEWCONNECTION = 0,        ///< A new player has connected
+	NYM_CONNECT_DISCONNECTED_TIMEOUT = 1, ///< Player disconnected due to timeout
+	NYM_CONNECT_DISCONNECTED_NORMAL = 2,  ///< Player disconnected of their own will
+	NYM_CONNECT_DISCONNECTED_KICK = 3,    ///< Player was kicked from the game
+	NYM_CONNECT_MAX = 4,                  ///< Max number of connection types
+} NymConnectType;

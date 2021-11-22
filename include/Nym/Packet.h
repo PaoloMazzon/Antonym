@@ -27,6 +27,7 @@ struct NymPlayerState {
 	double vsp;       ///< Vertical speed of this player
 	double health;    ///< Current health
 	double maxHealth; ///< New health
+	int spriteIndex;  ///< Index of the sprite to use for this player
 };
 
 /// \brief Player information
@@ -74,6 +75,13 @@ struct NymPacketServerLobby {
 	NYM_PACKET_HEADER
 };
 
+/// \brief Server sending info on someone connecting or disconnecting
+struct NymPacketServerConnection {
+	NYM_PACKET_HEADER
+	NymConnectType connection;   ///< Type of connection event this is
+	NymPlayerID id;              ///< ID of the player who just disconnected or ID of the new player
+	NymPlayerState initialState; ///< Initial state of the new player if its a new connection
+};
 
 /// \brief What the server will send to the client
 struct NymPacketServerMaster {

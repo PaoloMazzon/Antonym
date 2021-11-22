@@ -69,3 +69,9 @@ int NYM_PLAYER_INDEX = 0;
 double NYM_SPLASH_SCREEN_DURATION = 5;
 
 const char *NYM_SPLASH_SCREEN_TEXT = "Paolo Mazzon (c) 2021";
+
+double NYM_PACKET_DELAY = 45;
+
+int NYM_PLAYER_CHARACTER = 0;
+
+int NYM_PLAYER_INVALID = -1;

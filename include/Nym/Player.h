@@ -8,8 +8,7 @@
 
 /// \brief A player in the game, AI, human online, or this computer's player
 struct NymPlayer {
-	uint32_t id;          ///< ID of this player so we know what the server is talking about
-	JUSprite sprite;      ///< Sprite for this player
+	NymPlayerID id;       ///< ID of this player so we know what the server is talking about
 	NymPlayerState state; ///< State of this player
 };
 
