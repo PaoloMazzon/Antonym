@@ -83,8 +83,8 @@ NymClientStatus nymClientUpdate(NymGame game, NymClient client, NymPacketServerM
 	// Check if we need to send a new general packet (for game state)
 	if (juTime() - client->lastTime >= NYM_PACKET_DELAY / 1000) {
 		// Create packet for player state and send it
-		NymPacketClientPlayerUpdate playerPacket = {NYM_PACKET_TYPE_CLIENT_PLAYERUPDATE};
-		playerPacket.state = game->players[NYM_PLAYER_INDEX]->state;
+		NymPacketClientPlayerUpdate playerPacket;
+		nymPlayerCreatePacket(game->players[NYM_PLAYER_INDEX], &playerPacket);
 		nymClientSendPacket(client, &playerPacket, sizeof(struct NymPacketClientPlayerUpdate), false);
 
 		client->lastTime = juTime();
