@@ -160,7 +160,7 @@ NymPacketServerMaster *nymClientGetPacket(NymClient client) {
 	return out;
 }
 
-void nymClientStart(NymGame game, NymClient client, NymPacketServerMaster *packet) {
+void nymClientStart(NymGame game, NymClient client) {
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
@@ -171,6 +171,10 @@ void nymClientStart(NymGame game, NymClient client, NymPacketServerMaster *packe
 	}
 }
 
+NymClientStatus nymClientGetStatus(NymClient client) {
+	return client->status;
+}
+
 void nymClientDestroy(NymClient client) {
 	if (client != NULL) {
 		client->status = NYM_CLIENT_STATUS_KILL;
@@ -178,6 +182,7 @@ void nymClientDestroy(NymClient client) {
 		pthread_mutex_destroy(&client->clientLock);
 		enet_peer_disconnect(client->peer, 0);
 		enet_host_destroy(client->client);
+		nymFree(client->packetQueue);
 		nymFree(client);
 	}
 }

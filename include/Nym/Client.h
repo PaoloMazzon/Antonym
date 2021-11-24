@@ -37,7 +37,7 @@ NymClient nymClientCreate(const char *ip, const char *port);
 void nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable);
 
 /// \brief Should be called every frame (if this returns something other than NYM_CLIENT_STATUS_OK you gotta free the client)
-void nymClientStart(NymGame game, NymClient client, NymPacketServerMaster *packet);
+void nymClientStart(NymGame game, NymClient client);
 
 /// \brief Returns a packet if there is a packet waiting to be processed or NULL if the packet queue is empty (call nymFree on the pointer when you're done) (thread-safe)
 NymPacketServerMaster *nymClientGetPacket(NymClient client);

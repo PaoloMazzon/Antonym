@@ -15,7 +15,7 @@ void nymLevelTestingArenaStart(NymGame game) {
 	// TODO: Get a player id from the server
 
 	// Create player character
-	game->players[NYM_PLAYER_INDEX] = nymPlayerCreate(0, game->assets->sprPlayer1Idle, 100, 100);
+	game->players[NYM_PLAYER_INDEX] = nymPlayerCreate(0, 0, 100, 100);
 }
 
 NymLevel nymLevelTestingArenaUpdate(NymGame game) {

@@ -11,26 +11,23 @@ const float CHAT_X = 16;
 const float CHAT_Y = 16;
 
 void nymLevelLobbyStart(NymGame game) {
-
+	nymClientStart(game, game->client);
 }
 
 NymLevel nymLevelLobbyUpdate(NymGame game) {
 	if (game->client != NULL) {
-		// Update online stuff
-		NymPacketServerMaster packet;
-		if (nymClientUpdate(game, game->client, &packet) != NYM_CLIENT_STATUS_OK) {
-			nymUICreateMessage("Error", "Disconnected from host");
-			nymClientDestroy(game->client);
-			game->client = NULL;
-		}
-
-		// Handle the new packet
-		if (packet.type != NYM_PACKET_TYPE_NONE) {
-			if (packet.type == NYM_PACKET_TYPE_SERVER_MESSAGE) {
-				nymUIAddChatMessage(game, packet.message.message);
+		// Get new packets
+		NymPacketServerMaster *packet = nymClientGetPacket(game->client);
+		while (packet != NULL)
+		if (packet->type != NYM_PACKET_TYPE_NONE) {
+			if (packet->type == NYM_PACKET_TYPE_SERVER_MESSAGE) {
+				nymUIAddChatMessage(game, packet->message.message);
 			}
 
 			// TODO: Handle other packet types
+
+			nymFree(packet);
+			packet = nymClientGetPacket(game->client);
 		}
 
 		// Chat
@@ -43,6 +40,13 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 			nymUISelectChat(game, false);
 		} else if (juKeyboardGetKeyPressed(SDL_SCANCODE_RETURN) && !nymUIChatSelected(game)) {
 			nymUISelectChat(game, true);
+		}
+
+		// Check client status
+		if (nymClientGetStatus(game->client) != NYM_CLIENT_STATUS_OK) {
+			nymUICreateMessage("Error", "Disconnected from host");
+			nymClientDestroy(game->client);
+			game->client = NULL;
 		}
 
 		return NYM_LEVEL_LOBBY;
