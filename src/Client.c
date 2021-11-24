@@ -48,6 +48,7 @@ void *_nymClientUpdate(void *data) {
 
 	// Run the client as long as the status is good
 	while (client->status == NYM_CLIENT_STATUS_OK) {
+		pthread_mutex_lock(&client->clientLock);
 		NymPacketServerMaster packet = {};
 
 		// Check if we're still connected and all that
@@ -60,7 +61,7 @@ void *_nymClientUpdate(void *data) {
 		// Process whatever event might be waiting
 		ENetEvent event;
 		if (enet_host_service(client->client, &event, 0) >= 0) {
-			// We recieved a packet, ship it off
+			// We received a packet, ship it off
 			if (event.type == ENET_EVENT_TYPE_RECEIVE) {
 				if (sizeof(struct NymPacketClientMaster) - NYM_PACKET_HEADER_OFFSET < event.packet->dataLength) {
 					nymLog(NYM_LOG_LEVEL_WARNING, "Bad packet of size %i received.", event.packet->dataLength);
@@ -87,7 +88,10 @@ void *_nymClientUpdate(void *data) {
 
 			client->lastTime = juTime();
 		}
+		pthread_mutex_unlock(&client->clientLock);
 	}
+
+	return NULL;
 }
 
 NymClient nymClientCreate(const char *ip, const char *port) {
