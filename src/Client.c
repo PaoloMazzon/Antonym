@@ -14,11 +14,11 @@ typedef struct _NymClientArgs {
 	NymClient client;
 } _NymClientArgs;
 
-void _nymClientAddPacketToQueue(NymClient client, NymPacketServerMaster packet) {
+void _nymClientAddPacketToQueue(NymClient client, NymPacketServerMaster *packet) {
 	pthread_mutex_lock(&client->packetLock);
 
 	NymPacketServerMaster *ptr = nymMalloc(sizeof(struct NymPacketServerMaster));
-	*ptr = packet;
+	*ptr = *packet;
 
 	// Check if there is space in the packet queue
 	if (client->packetQueueSize <= client->packetCount) {
@@ -43,47 +43,51 @@ void _nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reli
 }
 
 void *_nymClientUpdate(void *data) {
-	// Just in case, we set the packet type to none
-	packet->type = NYM_PACKET_TYPE_NONE;
+	NymGame game = ((_NymClientArgs*)data)->game;
+	NymClient client = ((_NymClientArgs*)data)->client;
 
-	// Check if we're still connected and all that
-	ENetPeerState peerStatus = enet_peer_get_state(client->peer);
-	if (peerStatus == ENET_PEER_STATE_DISCONNECTED) {
-		nymLog(NYM_LOG_LEVEL_WARNING, "Disconnected from host.");
-		return NYM_CLIENT_STATUS_DISCONNECTED;
-	}
+	// Run the client as long as the status is good
+	while (client->status == NYM_CLIENT_STATUS_OK) {
+		NymPacketServerMaster packet = {};
 
-	// Process whatever event might be waiting
-	ENetEvent event;
-	if (enet_host_service(client->client, &event, 0) >= 0) {
-		// We recieved a packet, ship it off
-		if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-			if (sizeof(struct NymPacketClientMaster) - NYM_PACKET_HEADER_OFFSET < event.packet->dataLength) {
-				nymLog(NYM_LOG_LEVEL_WARNING, "Bad packet of size %i received.", event.packet->dataLength);
-			} else {
-				memcpy(&packet->message, event.packet->data, event.packet->dataLength);
-				packet->type = packet->lobby.type;
-			}
-			enet_packet_destroy(event.packet);
+		// Check if we're still connected and all that
+		ENetPeerState peerStatus = enet_peer_get_state(client->peer);
+		if (peerStatus == ENET_PEER_STATE_DISCONNECTED) {
+			nymLog(NYM_LOG_LEVEL_WARNING, "Disconnected from host.");
+			client->status = NYM_CLIENT_STATUS_DISCONNECTED;
 		}
-		if (event.peer != NULL)
-			event.peer->data = NULL;
-	} else {
-		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to update enet.");
-		return NYM_CLIENT_STATUS_ERROR;
+
+		// Process whatever event might be waiting
+		ENetEvent event;
+		if (enet_host_service(client->client, &event, 0) >= 0) {
+			// We recieved a packet, ship it off
+			if (event.type == ENET_EVENT_TYPE_RECEIVE) {
+				if (sizeof(struct NymPacketClientMaster) - NYM_PACKET_HEADER_OFFSET < event.packet->dataLength) {
+					nymLog(NYM_LOG_LEVEL_WARNING, "Bad packet of size %i received.", event.packet->dataLength);
+				} else {
+					memcpy(&packet.message, event.packet->data, event.packet->dataLength);
+					packet.type = packet.lobby.type;
+					_nymClientAddPacketToQueue(client, &packet);
+				}
+				enet_packet_destroy(event.packet);
+			}
+			if (event.peer != NULL)
+				event.peer->data = NULL;
+		} else {
+			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to update enet.");
+			client->status = NYM_CLIENT_STATUS_ERROR;
+		}
+
+		// Check if we need to send a new general packet (for game state)
+		if (juTime() - client->lastTime >= NYM_PACKET_DELAY / 1000) {
+			// Create packet for player state and send it
+			NymPacketClientPlayerUpdate playerPacket;
+			nymPlayerCreatePacket(game->players[NYM_PLAYER_INDEX], &playerPacket);
+			nymClientSendPacket(client, &playerPacket, sizeof(struct NymPacketClientPlayerUpdate), false);
+
+			client->lastTime = juTime();
+		}
 	}
-
-	// Check if we need to send a new general packet (for game state)
-	if (juTime() - client->lastTime >= NYM_PACKET_DELAY / 1000) {
-		// Create packet for player state and send it
-		NymPacketClientPlayerUpdate playerPacket;
-		nymPlayerCreatePacket(game->players[NYM_PLAYER_INDEX], &playerPacket);
-		nymClientSendPacket(client, &playerPacket, sizeof(struct NymPacketClientPlayerUpdate), false);
-
-		client->lastTime = juTime();
-	}
-
-	return NYM_CLIENT_STATUS_OK;
 }
 
 NymClient nymClientCreate(const char *ip, const char *port) {
