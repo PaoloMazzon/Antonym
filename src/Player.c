@@ -13,6 +13,7 @@ NymPlayer nymPlayerCreate(NymPlayerID id, int sprite, float x, float y) {
 	player->state.maxHealth = NYM_PLAYER_MAX_HP;
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_setprotocol(&attr, PTHREAD_MUTEX_DEFAULT);
 	pthread_mutex_init(&player->stateLock, &attr);
 
 	return player;

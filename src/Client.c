@@ -8,48 +8,22 @@
 #include "Nym/Game.h"
 #include "Nym/Player.h"
 
-NymClient nymClientCreate(const char *ip, const char *port) {
-	NymClient client = nymCalloc(sizeof(struct NymClient)); // TODO: Parse port
+/// \brief Passes data to the client thread
+typedef struct _NymClientArgs {
+	NymGame game;
+	NymClient client;
+} _NymClientArgs;
 
-	// Create host client
-	client->client = enet_host_create(NULL, 1, 2, 0, 0);
-	if (client->client != NULL) {
-		// Create peer
-		client->address.port = 7000; // TODO: Use the port
-		enet_address_set_host(&client->address, ip);
-		client->peer = enet_host_connect(client->client, &client->address, 2, 0);
-
-		// Make sure we get connected
-		ENetEvent event;
-		if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-			enet_host_flush(client->client);
-			client->lastTime = juTime();
-			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\" on port [%s].", ip, port);
-		} else {
-			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\" on port [%s].", ip, port);
-			enet_host_destroy(client->client);
-			nymFree(client);
-			client = NULL;
-		}
-	} else {
-		nymFree(client);
-		client = NULL;
-		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to create ENet host.");
-	}
-
-	return client;
-}
-
-NymClientStatus nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable) {
+// Non-thread safe version of send packet
+void _nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable) {
 	ENetPacket *packet = enet_packet_create(data, size, reliable ? ENET_PACKET_FLAG_RELIABLE : 0);
 	if (enet_peer_send(client->peer, 0, packet) < 0) {
 		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to send packet.");
-		return NYM_CLIENT_STATUS_ERROR;
+		client->status = NYM_CLIENT_STATUS_ERROR;
 	}
-	return NYM_CLIENT_STATUS_OK;
 }
 
-NymClientStatus nymClientUpdate(NymGame game, NymClient client, NymPacketServerMaster *packet) {
+void *_nymClientUpdate(void *data) {
 	// Just in case, we set the packet type to none
 	packet->type = NYM_PACKET_TYPE_NONE;
 
@@ -93,8 +67,69 @@ NymClientStatus nymClientUpdate(NymGame game, NymClient client, NymPacketServerM
 	return NYM_CLIENT_STATUS_OK;
 }
 
+NymClient nymClientCreate(const char *ip, const char *port) {
+	NymClient client = nymCalloc(sizeof(struct NymClient)); // TODO: Parse port
+
+	// Create host client
+	client->client = enet_host_create(NULL, 1, 2, 0, 0);
+	client->status = NYM_CLIENT_STATUS_OK;
+	if (client->client != NULL) {
+		// Create peer
+		int portint;
+		sscanf(port, "%i", &portint);
+		client->address.port = (uint16_t)portint;
+		enet_address_set_host(&client->address, ip);
+		client->peer = enet_host_connect(client->client, &client->address, 2, 0);
+		pthread_mutexattr_t attr;
+		pthread_mutexattr_init(&attr);
+		pthread_mutexattr_setprotocol(&attr, PTHREAD_MUTEX_DEFAULT);
+		pthread_mutex_init(&client->clientLock, &attr);
+
+		// Make sure we get connected
+		ENetEvent event;
+		if (enet_host_service(client->client, &event, NYM_CONNECTION_TIMEOUT) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
+			enet_host_flush(client->client);
+			client->lastTime = juTime();
+			nymLog(NYM_LOG_LEVEL_MESSAGE, "Connected to host \"%s\" on port [%s].", ip, port);
+		} else {
+			nymLog(NYM_LOG_LEVEL_ERROR, "Failed to connect to host \"%s\" on port [%s].", ip, port);
+			enet_host_destroy(client->client);
+			nymFree(client);
+			client = NULL;
+		}
+	} else {
+		nymFree(client);
+		client = NULL;
+		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to create ENet host.");
+	}
+
+	return client;
+}
+
+void nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable) {
+	if (client->status == NYM_CLIENT_STATUS_OK) {
+		pthread_mutex_lock(&client->clientLock);
+		_nymClientSendPacket(client, data, size, reliable);
+		pthread_mutex_unlock(&client->clientLock);
+	}
+}
+
+void nymClientStart(NymGame game, NymClient client, NymPacketServerMaster *packet) {
+	pthread_attr_t attr;
+	pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	_NymClientArgs arg = {game, client};
+	if (pthread_create(&client->thread, &attr, _nymClientUpdate, &arg) != 0) {
+		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to create client thread.");
+		client->status = NYM_CLIENT_STATUS_ERROR;
+	}
+}
+
 void nymClientDestroy(NymClient client) {
 	if (client != NULL) {
+		client->status = NYM_CLIENT_STATUS_KILL;
+		pthread_join(client->thread, NULL);
+		pthread_mutex_destroy(&client->clientLock);
 		enet_peer_disconnect(client->peer, 0);
 		enet_host_destroy(client->client);
 		nymFree(client);

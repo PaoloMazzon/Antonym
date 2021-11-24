@@ -73,7 +73,8 @@ typedef enum {
 	NYM_CLIENT_STATUS_TIMEOUT = 2,      ///< Server timed out
 	NYM_CLIENT_STATUS_KICKED = 3,       ///< Server kicked this client
 	NYM_CLIENT_STATUS_ERROR = 4,        ///< An error occurred
-	NYM_CLIENT_STATUS_MAX = 5,          ///< Max number of status codes
+	NYM_CLIENT_STATUS_KILL = 5,         ///< Kill the client thread and shutdown (internal use)
+	NYM_CLIENT_STATUS_MAX = 6,          ///< Max number of status codes
 } NymClientStatus;
 
 /// \brief Whether this is a new connection or a disconnect for connection packets
