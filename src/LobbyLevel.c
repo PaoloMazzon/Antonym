@@ -11,7 +11,7 @@ const float CHAT_X = 16;
 const float CHAT_Y = 16;
 
 void nymLevelLobbyStart(NymGame game) {
-	nymClientStart(game, game->client);
+
 }
 
 NymLevel nymLevelLobbyUpdate(NymGame game) {

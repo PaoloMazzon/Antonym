@@ -72,6 +72,7 @@ NymLevel nymLevelConnectionScreenUpdate(NymGame game) {
 			strcpy(game->save->lastName, gNameTextbox.text);
 			nymSaveFlush(game->save, NYM_SAVE_FILE);
 
+			nymClientStart(game, game->client);
 			return NYM_LEVEL_LOBBY;
 		} else {
 			nymUICreateMessage("Connection failed", "Failed to connect to host");

@@ -45,6 +45,7 @@ void _nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reli
 void *_nymClientUpdate(void *data) {
 	NymGame game = ((_NymClientArgs*)data)->game;
 	NymClient client = ((_NymClientArgs*)data)->client;
+	nymFree(data);
 
 	// Run the client as long as the status is good
 	while (client->status == NYM_CLIENT_STATUS_OK) {
@@ -84,10 +85,11 @@ void *_nymClientUpdate(void *data) {
 			// Create packet for player state and send it
 			NymPacketClientPlayerUpdate playerPacket;
 			nymPlayerCreatePacket(game->players[NYM_PLAYER_INDEX], &playerPacket);
-			nymClientSendPacket(client, &playerPacket, sizeof(struct NymPacketClientPlayerUpdate), false);
+			_nymClientSendPacket(client, &playerPacket, sizeof(struct NymPacketClientPlayerUpdate), false);
 
 			client->lastTime = juTime();
 		}
+
 		pthread_mutex_unlock(&client->clientLock);
 	}
 
@@ -168,8 +170,11 @@ void nymClientStart(NymGame game, NymClient client) {
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-	_NymClientArgs arg = {game, client};
-	if (pthread_create(&client->thread, &attr, _nymClientUpdate, &arg) != 0) {
+
+	_NymClientArgs *arg = nymMalloc(sizeof(struct _NymClientArgs));
+	arg->game = game;
+	arg->client = client;
+	if (pthread_create(&client->thread, &attr, _nymClientUpdate, arg) != 0) {
 		nymLog(NYM_LOG_LEVEL_ERROR, "Failed to create client thread.");
 		client->status = NYM_CLIENT_STATUS_ERROR;
 	}
