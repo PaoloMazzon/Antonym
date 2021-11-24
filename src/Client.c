@@ -14,6 +14,10 @@ typedef struct _NymClientArgs {
 	NymClient client;
 } _NymClientArgs;
 
+void _nymClientAddPacketToQueue(NymClient client, NymPacketServerMaster packet) {
+	// TODO: This
+}
+
 // Non-thread safe version of send packet
 void _nymClientSendPacket(NymClient client, void *data, uint32_t size, bool reliable) {
 	ENetPacket *packet = enet_packet_create(data, size, reliable ? ENET_PACKET_FLAG_RELIABLE : 0);
@@ -74,16 +78,21 @@ NymClient nymClientCreate(const char *ip, const char *port) {
 	client->client = enet_host_create(NULL, 1, 2, 0, 0);
 	client->status = NYM_CLIENT_STATUS_OK;
 	if (client->client != NULL) {
-		// Create peer
+		// Setup enet
 		int portint;
 		sscanf(port, "%i", &portint);
 		client->address.port = (uint16_t)portint;
 		enet_address_set_host(&client->address, ip);
 		client->peer = enet_host_connect(client->client, &client->address, 2, 0);
+
+		// Create the mutexes
 		pthread_mutexattr_t attr;
 		pthread_mutexattr_init(&attr);
 		pthread_mutexattr_setprotocol(&attr, PTHREAD_MUTEX_DEFAULT);
 		pthread_mutex_init(&client->clientLock, &attr);
+		pthread_mutexattr_init(&attr);
+		pthread_mutexattr_setprotocol(&attr, PTHREAD_MUTEX_DEFAULT);
+		pthread_mutex_init(&client->packetLock, &attr);
 
 		// Make sure we get connected
 		ENetEvent event;
@@ -112,6 +121,24 @@ void nymClientSendPacket(NymClient client, void *data, uint32_t size, bool relia
 		_nymClientSendPacket(client, data, size, reliable);
 		pthread_mutex_unlock(&client->clientLock);
 	}
+}
+
+NymPacketServerMaster *nymClientGetPacket(NymClient client) {
+	NymPacketServerMaster *out = NULL;
+	if (client->packetCount > 0) {
+		pthread_mutex_lock(&client->packetLock);
+
+		// Get the packet
+		out = client->packetQueue[0];
+
+		// Shift the queue down
+		for (int i = 0; i < client->packetQueueSize - 1; i++)
+			client->packetQueue[i] = client->packetQueue[i + 1];
+		client->packetQueueSize--;
+
+		pthread_mutex_unlock(&client->packetLock);
+	}
+	return out;
 }
 
 void nymClientStart(NymGame game, NymClient client, NymPacketServerMaster *packet) {

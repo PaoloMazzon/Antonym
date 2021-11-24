@@ -15,8 +15,8 @@ struct NymClient {
 	double lastTime;     ///< Time since the last general packet was sent
 
 	// Packet management
-	NymPacketServerMaster *packetQueue; ///< All packets waiting to be grabbed by the game
-	int packetCount;                    ///< How many packets in the queue
+	NymPacketServerMaster **packetQueue; ///< All packets waiting to be grabbed by the game
+	_Atomic int packetCount;                    ///< How many packets in the queue
 	int packetQueueSize;                ///< Size of the queue array in elements
 
 	// Synchronization
@@ -38,6 +38,9 @@ void nymClientSendPacket(NymClient client, void *data, uint32_t size, bool relia
 
 /// \brief Should be called every frame (if this returns something other than NYM_CLIENT_STATUS_OK you gotta free the client)
 void nymClientStart(NymGame game, NymClient client, NymPacketServerMaster *packet);
+
+/// \brief Returns a packet if there is a packet waiting to be processed or NULL if the packet queue is empty (call nymFree on the pointer when you're done) (thread-safe)
+NymPacketServerMaster *nymClientGetPacket(NymClient client);
 
 /// \brief If this returns anything other that NYM_CLIENT_STATUS_OK you have to free the client (thread-safe)
 NymClientStatus nymClientGetStatus(NymClient client);
