@@ -86,3 +86,6 @@ extern int NYM_PLAYER_INVALID;
 
 ///< Max health of a player
 extern double NYM_PLAYER_MAX_HP;
+
+///< How many elements to add to an array when extending it
+extern int NYM_ARRAY_EXTENSION;

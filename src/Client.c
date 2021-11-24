@@ -15,7 +15,22 @@ typedef struct _NymClientArgs {
 } _NymClientArgs;
 
 void _nymClientAddPacketToQueue(NymClient client, NymPacketServerMaster packet) {
-	// TODO: This
+	pthread_mutex_lock(&client->packetLock);
+
+	NymPacketServerMaster *ptr = nymMalloc(sizeof(struct NymPacketServerMaster));
+	*ptr = packet;
+
+	// Check if there is space in the packet queue
+	if (client->packetQueueSize <= client->packetCount) {
+		client->packetQueueSize += NYM_ARRAY_EXTENSION;
+		client->packetQueue = nymRealloc(client->packetQueue, client->packetQueueSize * sizeof(NymPacketServerMaster*));
+	}
+
+	// Put the packet at the back of the queue
+	client->packetQueue[client->packetCount] = ptr;
+	client->packetCount++;
+
+	pthread_mutex_unlock(&client->packetLock);
 }
 
 // Non-thread safe version of send packet
@@ -132,9 +147,9 @@ NymPacketServerMaster *nymClientGetPacket(NymClient client) {
 		out = client->packetQueue[0];
 
 		// Shift the queue down
-		for (int i = 0; i < client->packetQueueSize - 1; i++)
+		for (int i = 0; i < client->packetCount - 1; i++)
 			client->packetQueue[i] = client->packetQueue[i + 1];
-		client->packetQueueSize--;
+		client->packetCount--;
 
 		pthread_mutex_unlock(&client->packetLock);
 	}

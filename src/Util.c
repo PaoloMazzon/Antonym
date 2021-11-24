@@ -20,6 +20,13 @@ void *nymCalloc(uint32_t size) {
 	return out;
 }
 
+void *nymRealloc(void *ptr, uint32_t size) {
+	void *out = realloc(ptr, size);
+	if (out == NULL)
+		nymLog(NYM_LOG_LEVEL_CRITICAL, "Failed to reallocate %i bytes", size);
+	return out;
+}
+
 void nymFree(void *ptr) {
 	if (ptr != NULL) free(ptr);
 }
