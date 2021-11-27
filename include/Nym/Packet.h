@@ -46,6 +46,7 @@ struct NymPacketClientMessage {
 /// \brief Client side information on the user's lobby choices
 struct NymPacketClientLobby {
 	NYM_PACKET_HEADER
+	char playerName[NYM_NAME_MAX_CHARACTERS]; ///< Player's name
 };
 
 /// \brief What the client will return to the game loop
@@ -75,12 +76,19 @@ struct NymPacketServerLobby {
 	NYM_PACKET_HEADER
 };
 
+/// \brief Server sends this to each new client when they connect
+struct NymPacketServerInitial {
+	NYM_PACKET_HEADER
+	NymPlayerID id; ///< ID assigned to whoever recieves this packet
+};
+
 /// \brief Server sending info on someone connecting or disconnecting
 struct NymPacketServerConnection {
 	NYM_PACKET_HEADER
-	NymConnectType connection;   ///< Type of connection event this is
-	NymPlayerID id;              ///< ID of the player who just disconnected or ID of the new player
-	NymPlayerState initialState; ///< Initial state of the new player if its a new connection
+	NymConnectType connection;           ///< Type of connection event this is
+	NymPlayerID id;                      ///< ID of the player who just disconnected or ID of the new player
+	NymPlayerState initialState;         ///< Initial state of the new player if its a new connection
+	char *name[NYM_NAME_MAX_CHARACTERS]; ///< Name of the new player if its a new connection
 };
 
 /// \brief What the server will send to the client
@@ -90,5 +98,7 @@ struct NymPacketServerMaster {
 		NymPacketServerLobby lobby;
 		NymPacketServerMessage message;
 		NymPacketServerPlayerUpdates playerUpdates;
+		NymPacketServerConnection serverConnection;
+		NymPacketServerInitial initial;
 	};
 };

@@ -1,6 +1,7 @@
 /// \file ConnectionScreenLevel.h.c
 /// \author Paolo Mazzon
 #include "Nym/Levels.h"
+#include "Nym/Packet.h"
 #include "Nym/Game.h"
 #include "Nym/UI.h"
 #include "Nym/Client.h"
@@ -72,7 +73,13 @@ NymLevel nymLevelConnectionScreenUpdate(NymGame game) {
 			strcpy(game->save->lastName, gNameTextbox.text);
 			nymSaveFlush(game->save, NYM_SAVE_FILE);
 
+
+			// Send the lobby pakcet
+			NymPacketClientLobby lobby = {NYM_PACKET_TYPE_CLIENT_LOBBY};
+			strncpy(lobby.playerName, gNameTextbox.text, gNameTextbox.maxCharacters);
 			nymClientStart(game, game->client);
+			nymClientSendPacket(game->client, &lobby, sizeof(struct NymPacketClientLobby), true);
+
 			return NYM_LEVEL_LOBBY;
 		} else {
 			nymUICreateMessage("Connection failed", "Failed to connect to host");

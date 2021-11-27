@@ -69,3 +69,7 @@ void nymLog(NymLogLevel level, const char *fmt, ...) {
 	if (level == NYM_LOG_LEVEL_CRITICAL)
 		abort();
 }
+
+void nymSanitizeString(char *string, int size) {
+	string[size - 1] = 0;
+}

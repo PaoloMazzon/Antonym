@@ -15,8 +15,6 @@ typedef struct NymSave *NymSave;
 typedef struct NymUIButton NymUIButton;
 typedef struct NymClient *NymClient;
 typedef struct NymUIMessage NymUIMessage;
-typedef struct NymPacketClient NymPacketClient;
-typedef struct NymPacketServer NymPacketServer;
 typedef struct NymPlayer *NymPlayer;
 typedef struct NymPlayerControls NymPlayerControls;
 typedef struct NymPlayerState NymPlayerState;
@@ -31,6 +29,7 @@ typedef struct NymPacketServerLobby NymPacketServerLobby;
 typedef struct NymPacketServerMaster NymPacketServerMaster;
 typedef struct NymUIChatbox NymUIChatbox;
 typedef struct NymPacketServerConnection NymPacketServerConnection;
+typedef struct NymPacketServerInitial NymPacketServerInitial;
 
 /********************** Enums **********************/
 
@@ -60,10 +59,11 @@ typedef enum {
 	NYM_PACKET_TYPE_CLIENT_PLAYERUPDATE = 1,  ///< Information on this player's movements
 	NYM_PACKET_TYPE_CLIENT_MESSAGE = 2,       ///< Client sent a chat message
 	NYM_PACKET_TYPE_CLIENT_LOBBY = 3,         ///< Client chose some lobby information
-	NYM_PACKET_TYPE_SERVER_PLAYERUPDATES = 4, ///< Server telling the clients other player's information
-	NYM_PACKET_TYPE_SERVER_MESSAGE = 5,       ///< Server providing new chat message
-	NYM_PACKET_TYPE_SERVER_LOBBY = 6,         ///< Server's lobby choices from other players
-	NYM_PACKET_TYPE_MAX = 6,                  ///< Max number of packet types
+	NYM_PACKET_TYPE_CLIENT_INITIAL = 4,       ///< Initial information the client sends on connecting
+	NYM_PACKET_TYPE_SERVER_PLAYERUPDATES = 5, ///< Server telling the clients other player's information
+	NYM_PACKET_TYPE_SERVER_MESSAGE = 6,       ///< Server providing new chat message
+	NYM_PACKET_TYPE_SERVER_LOBBY = 7,         ///< Server's lobby choices from other players
+	NYM_PACKET_TYPE_MAX = 8,                  ///< Max number of packet types
 } NymPacketType;
 
 /// \brief Status of the client

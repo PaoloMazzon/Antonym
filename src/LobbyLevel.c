@@ -21,6 +21,7 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 		while (packet != NULL)
 		if (packet->type != NYM_PACKET_TYPE_NONE) {
 			if (packet->type == NYM_PACKET_TYPE_SERVER_MESSAGE) {
+				nymSanitizeString(packet->message.message, NYM_MAX_CHAT_CHARACTERS);
 				nymUIAddChatMessage(game, packet->message.message);
 			}
 
