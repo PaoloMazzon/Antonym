@@ -2,6 +2,7 @@
 /// \author Paolo Mazzon
 /// \brief Just declares the contents of an Antonym packet
 #pragma once
+#include <stdbool.h>
 #include "Nym/Structs.h"
 #include "Nym/Constants.h"
 

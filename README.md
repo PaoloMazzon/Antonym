@@ -10,3 +10,8 @@ build system. To update the assets run the command
     JamUtil/GenHeader.py "-o=include/Nym/Assets.h" "-dir=data" -recursive "-map=data/Sprites.ini" -var=ASSETS -struct=NymAssets
 
 On a terminal with Python 3+ installed. 
+
+Known Bugs
+==========
+
+ + Crash when a packet fails to send
