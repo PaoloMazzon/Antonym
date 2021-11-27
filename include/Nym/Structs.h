@@ -63,7 +63,8 @@ typedef enum {
 	NYM_PACKET_TYPE_SERVER_MESSAGE = 5,       ///< Server providing new chat message
 	NYM_PACKET_TYPE_SERVER_LOBBY = 6,         ///< Server's lobby choices from other players
 	NYM_PACKET_TYPE_SERVER_INITIAL = 7,       ///< Initial information the server sends on connecting
-	NYM_PACKET_TYPE_MAX = 8,                  ///< Max number of packet types
+	NYM_PACKET_TYPE_SERVER_CONNECTION = 8,    ///< Information on someone connecting or disconnecting
+	NYM_PACKET_TYPE_MAX = 9,                  ///< Max number of packet types
 } NymPacketType;
 
 /// \brief Status of the client

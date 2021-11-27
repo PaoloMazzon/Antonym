@@ -7,6 +7,7 @@
 #include "Nym/Packet.h"
 #include "Nym/UI.h"
 #include "Nym/Player.h"
+#include "Nym/Net.h"
 
 const float CHAT_X = 16;
 const float CHAT_Y = 16;
@@ -19,17 +20,9 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 	if (game->client != NULL) {
 		// Get new packets
 		NymPacketServerMaster *packet = nymClientGetPacket(game->client);
-		while (packet != NULL)
-		if (packet->type != NYM_PACKET_TYPE_NONE) {
-			if (packet->type == NYM_PACKET_TYPE_SERVER_MESSAGE) {
-				nymSanitizeString(packet->message.message, NYM_MAX_CHAT_CHARACTERS);
-				nymUIAddChatMessage(game, packet->message.message);
-			} else if (packet->type == NYM_PACKET_TYPE_SERVER_INITIAL) {
-				game->players[NYM_PLAYER_INDEX]->id = packet->initial.id;
-			}
-
-			// TODO: Handle other packet types
-
+		while (packet != NULL) {
+			if (packet->type != NYM_PACKET_TYPE_NONE)
+				nymNetHandlePacket(game, packet);
 			nymFree(packet);
 			packet = nymClientGetPacket(game->client);
 		}
