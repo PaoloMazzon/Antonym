@@ -12,11 +12,12 @@
 /// will always be the save version number, so when loaded we can just check the first 4
 /// bytes and load the save depending on what version of save it is.
 struct NymSave {
-	uint32_t saveVersion; ///< For compatibility across different versions of the save file
-	VK2DRendererConfig rendererConfig; ///< Render config
+	uint32_t saveVersion;                      ///< For compatibility across different versions of the save file
+	VK2DRendererConfig rendererConfig;         ///< Render config
 	char lastIP[NYM_MAX_TEXTBOX_CHARACTERS];   ///< Last IP the player used online
 	char lastPort[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Last port the player used online
 	char lastName[NYM_MAX_TEXTBOX_CHARACTERS]; ///< Last name the player used online
+	int playerSprite;                          ///< Chosen player sprite
 };
 
 /// \brief Loads a save from a file, creating a new one with default values if not

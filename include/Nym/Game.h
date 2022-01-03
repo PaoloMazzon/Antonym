@@ -29,6 +29,11 @@ struct NymGame {
 		bool mm[2]; ///< Mouse button middle (current frame and last frame)
 		bool mr[2]; ///< Mouse button right (current frame and last frame)
 	} Input;
+
+	///< Flags the game might need
+	struct {
+		bool versionMismatch; ///< In case there is a version mismatch
+	} Flags;
 };
 
 /// \brief Starts the game

@@ -12,6 +12,9 @@
 ///< Amount of bytes the above header is
 #define NYM_PACKET_HEADER_OFFSET sizeof(NymPacketType)
 
+///< Net version
+#define NYM_NET_VERSION ((int)1)
+
 /// \brief All possible controls the player may use
 struct NymPlayerControls {
 	float moveX;     ///< Movement of the player in the x direction from -1 to 1
@@ -48,6 +51,7 @@ struct NymPacketClientMessage {
 struct NymPacketClientLobby {
 	NYM_PACKET_HEADER
 	char playerName[NYM_NAME_MAX_CHARACTERS]; ///< Player's name
+	int version;                              ///< Client version
 };
 
 /// \brief What the client will return to the game loop
@@ -81,6 +85,9 @@ struct NymPacketServerLobby {
 struct NymPacketServerInitial {
 	NYM_PACKET_HEADER
 	NymPlayerID id; ///< ID assigned to whoever recieves this packet
+	int version;    ///< Version of the server
+	float x;        ///< Player starting x coordinate
+	float y;        ///< Player starting y coordinate
 };
 
 /// \brief Server sending info on someone connecting or disconnecting

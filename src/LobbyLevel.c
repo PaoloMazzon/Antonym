@@ -41,7 +41,12 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 
 		// Check client status
 		if (nymClientGetStatus(game->client) != NYM_CLIENT_STATUS_OK) {
-			nymUICreateMessage("Error", "Disconnected from host");
+			if (game->Flags.versionMismatch) {
+				game->Flags.versionMismatch = false;
+				nymUICreateMessage("Version error", "Version mismatch between host and client.");
+			} else {
+				nymUICreateMessage("Error", "Disconnected from host");
+			}
 			nymClientDestroy(game->client);
 			game->client = NULL;
 		}

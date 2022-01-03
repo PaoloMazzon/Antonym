@@ -10,6 +10,7 @@ void _nymSaveCreateDefault(NymSave save) {
 	save->rendererConfig.filterMode = ft_Nearest;
 	save->rendererConfig.screenMode = sm_TripleBuffer;
 	save->rendererConfig.msaa = msaa_32x;
+	save->playerSprite = 0;
 	strcpy(save->lastIP, "127.0.0.1");
 	strcpy(save->lastPort, "7000");
 	strcpy(save->lastName, "JOE MAMA");
