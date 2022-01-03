@@ -53,11 +53,11 @@ void *_nymClientUpdate(void *data) {
 		NymPacketServerMaster packet = {};
 
 		// Check if we're still connected and all that
-		ENetPeerState peerStatus = enet_peer_get_state(client->peer);
+		/*ENetPeerState peerStatus = enet_peer_get_state(client->peer);
 		if (peerStatus == ENET_PEER_STATE_DISCONNECTED) {
 			nymLog(NYM_LOG_LEVEL_WARNING, "Disconnected from host.");
 			client->status = NYM_CLIENT_STATUS_DISCONNECTED;
-		}
+		}*/
 
 		// Process whatever event might be waiting
 		ENetEvent event;
@@ -72,6 +72,17 @@ void *_nymClientUpdate(void *data) {
 					_nymClientAddPacketToQueue(client, &packet);
 				}
 				enet_packet_destroy(event.packet);
+			} else if (event.type == ENET_EVENT_TYPE_DISCONNECT || event.type == ENET_EVENT_TYPE_DISCONNECT_TIMEOUT) {
+				if (event.data == NYM_NET_KICK_DATA) {
+					nymLog(NYM_LOG_LEVEL_WARNING, "Kicked from the server.");
+					client->status = NYM_CLIENT_STATUS_KICKED;
+				} else if (event.type == ENET_EVENT_TYPE_DISCONNECT) {
+					nymLog(NYM_LOG_LEVEL_WARNING, "Disconnected from host.");
+					client->status = NYM_CLIENT_STATUS_DISCONNECTED;
+				} else if (event.type == ENET_EVENT_TYPE_DISCONNECT_TIMEOUT) {
+					nymLog(NYM_LOG_LEVEL_WARNING, "Disconnected from host due to timeout.");
+					client->status = NYM_CLIENT_STATUS_TIMEOUT;
+				}
 			}
 			if (event.peer != NULL)
 				event.peer->data = NULL;

@@ -40,12 +40,18 @@ NymLevel nymLevelLobbyUpdate(NymGame game) {
 		}
 
 		// Check client status
-		if (nymClientGetStatus(game->client) != NYM_CLIENT_STATUS_OK) {
+		NymClientStatus status = nymClientGetStatus(game->client);
+		if (status != NYM_CLIENT_STATUS_OK) {
 			if (game->Flags.versionMismatch) {
 				game->Flags.versionMismatch = false;
 				nymUICreateMessage("Version error", "Version mismatch between host and client.");
 			} else {
-				nymUICreateMessage("Error", "Disconnected from host");
+				if (status == NYM_CLIENT_STATUS_TIMEOUT)
+					nymUICreateMessage("Timeout", "Disconnected due to timeout");
+				else if (status == NYM_CLIENT_STATUS_KICKED)
+					nymUICreateMessage("Kicked", "Kicked from the game");
+				else
+					nymUICreateMessage("Error", "Disconnected from host");
 			}
 			nymClientDestroy(game->client);
 			game->client = NULL;

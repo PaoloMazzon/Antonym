@@ -15,6 +15,9 @@
 ///< Net version
 #define NYM_NET_VERSION ((int)1)
 
+///< Data that describes a client was kicked
+#define NYM_NET_KICK_DATA ((uint32_t)10)
+
 /// \brief All possible controls the player may use
 struct NymPlayerControls {
 	float moveX;     ///< Movement of the player in the x direction from -1 to 1
